@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/KingRovs771/AbsensiK-BackEnd/config"
+	deliveryhttp "github.com/KingRovs771/AbsensiK-BackEnd/internal/delivery/http"
+	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/repository"
+	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/infrastructure/database"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/infrastructure/router"
-	"github.com/KingRovs771/AbsensiK-BackEnd/internal/infrastructure/services"
 )
 
 type App struct {
@@ -15,13 +17,19 @@ type App struct {
 
 func NewApp() *App {
 
-	config := config.LoadConfig()
-	db := database.NewDatabase(config)
+	configs:= config.LoadConfig()
+	db:= database.NewDatabase(configs)
+	// # Repo
+	userRepo:= repository.NewUserRepository(db)
+	
+	// # Service
+	userService:= services.NewUserService(userRepo)
 
-	userService := services.NewUserService(db)
-	userHandler := http.NewUserHandler(userService)
+	// # User Handler
+	userHandler := deliveryhttp.NewUserHandler(userService)
 
-	router := router.NewRouter(userHandler)
+	// # Auth Handlers
+ 	router:= router.NewRouter(userHandler)
 
 	return &App{Router: router}
 }
