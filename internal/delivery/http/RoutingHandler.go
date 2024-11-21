@@ -7,7 +7,3 @@ func UserHandlres(r *mux.Router, userHandler *UserHandler){
 	r.HandleFunc("/users/insertUsers", userHandler.CreateUser).Methods("POST")
 	r.HandleFunc("/users/AllUsers", userHandler.GetAllUsers).Methods("GET")
 }
-
-func AuthHandlers(r *mux.Router, authHandlre *AuthHandler){
-	
-}

@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/repository"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -18,6 +19,15 @@ func(s *UserService) CheckAPI() string{
 }
 
 func (s *UserService) CreateUser(user *models.AK_USERS)map[string]interface{}{
+	hasedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return map[string]interface{}{
+			"Status" : "error",
+			"Message" : "Gagal enkripsi Password",
+			"error" : err.Error(),
+		}
+	}
+	user.Password = string(hasedPassword)
 	if err := s.UserRepository.CreateUser(user); err != nil {
 		return map[string]interface{}{
 			"Status" : "Error",

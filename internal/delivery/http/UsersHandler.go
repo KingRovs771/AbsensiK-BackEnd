@@ -6,6 +6,7 @@ import (
 
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserHandler struct{
@@ -37,8 +38,8 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Data Pengguna Tidak Lengkap", http.StatusBadRequest)
 		return
 	}
-	// hashPassword := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	// user.Password = string(hashPassword)
+	hashPassword := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	user.Password = string(hashPassword)
 	response := h.UserService.CreateUser(&user)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)

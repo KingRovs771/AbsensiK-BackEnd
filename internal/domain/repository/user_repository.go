@@ -25,3 +25,15 @@ func (r *UserRepository) GetAllUsers() ([]models.AK_USERS, error){
 	}
 	return users, nil
 }
+
+func (r *UserRepository) GetUserById(UserId int64)(*models.AK_USERS, error){
+	var users models.AK_USERS
+	if err := r.DB.Find(&users, UserId).Error; err != nil {
+		return nil, err	
+	}
+	return &users, nil
+}
+
+func (r *UserRepository) UpdateUser(user *models.AK_USERS) error{
+	return r.DB.Save(user).Error
+}

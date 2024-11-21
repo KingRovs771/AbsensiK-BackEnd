@@ -21,15 +21,17 @@ func NewApp() *App {
 	db:= database.NewDatabase(configs)
 	// # Repo
 	userRepo:= repository.NewUserRepository(db)
+	authRepo:= repository.NewAuthRepostory(db)
 	
 	// # Service
 	userService:= services.NewUserService(userRepo)
+	authService:= services.NewAuthService(authRepo, "secretyaa")
 
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
-
+	authHandler := deliveryhttp.NewAuthHandler(authService)
 	// # Auth Handlers
- 	router:= router.NewRouter(userHandler)
+ 	router:= router.NewRouter(userHandler, authHandler)
 
 	return &App{Router: router}
 }
