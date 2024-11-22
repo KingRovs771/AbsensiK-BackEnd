@@ -11,6 +11,9 @@ type AK_USERS struct {
 	Phone         string `gorm:"type:varchar(15)" json:"phone"`
 	Address       string `gorm:"type:text" json:"address"`
 	Dailyrate     int64  `gorm:"type:int" json:"dailyrate"`
-	DepartementId string `gorm:"type:string" json:"departement_id"`
+	DepartementId string `gorm:"type:varchar(15)" json:"departement_id"`
 	RoleId        string `gorm:"type:varchar(15)" json:"role_id"`
+
+	Ak_Roles       Ak_Roles       `gorm:"foreignKey:RoleId" json:"role"`
+	Ak_Departement Ak_Departments `gorm:"foreignKey:DepartementId" json:"departement"`
 }

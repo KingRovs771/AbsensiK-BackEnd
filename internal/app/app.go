@@ -17,25 +17,27 @@ type App struct {
 
 func NewApp() *App {
 
-	configs:= config.LoadConfig()
-	db:= database.NewDatabase(configs)
+	configs := config.LoadConfig()
+	db := database.NewDatabase(configs)
 	// # Repo
-	userRepo:= repository.NewUserRepository(db)
-	authRepo:= repository.NewAuthRepostory(db)
-	
-	// # Service
-	userService:= services.NewUserService(userRepo)
-	authService:= services.NewAuthService(authRepo, "secretyaa")
+	userRepo := repository.NewUserRepository(db)
+	authRepo := repository.NewAuthRepostory(db)
+	departementRepo := repository.NewDepartementsRepository(db)
 
+	// # Service
+	userService := services.NewUserService(userRepo, "secretyaa")
+	authService := services.NewAuthService(authRepo, "secretyaa")
+	departementService := services.NewDepartementService(departementRepo, "secretyaa")
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
 	authHandler := deliveryhttp.NewAuthHandler(authService)
+	departementHandler := deliveryhttp.NewDepartementHandler(departementService)
 	// # Auth Handlers
- 	router:= router.NewRouter(userHandler, authHandler)
+	router := router.NewRouter(userHandler, authHandler, departementHandler)
 
 	return &App{Router: router}
 }
 
-func (a *App) SetupRouter() http.Handler{
+func (a *App) SetupRouter() http.Handler {
 	return a.Router
 }

@@ -56,7 +56,7 @@ func (s *AuthService) Authenticate(username, password string)(string, error){
 		return "", err
 	}
 
-
+ 
 	token, err :=s.GenerateToken(user)
 	if err != nil {
 		log.Println("Error Generating Token : ", err)

@@ -8,10 +8,12 @@ import (
 
 type UserService struct {
 	UserRepository *repository.UserRepository
+	SecretKey string
 }
 
-func NewUserService(userRepo *repository.UserRepository) *UserService {
-	return &UserService{UserRepository: userRepo}
+func NewUserService(userRepo *repository.UserRepository, secretKey string) *UserService {
+	return &UserService{UserRepository: userRepo,
+		SecretKey: secretKey,}
 }
 
 func(s *UserService) CheckAPI() string{
@@ -65,4 +67,8 @@ func (s *UserService) GetAllUsers() map[string]interface{}{
 		"Message" : "Berhasil Mendapatkan Semua Users",
 		"Users" : users,
 	}
+}
+
+func (s *UserService) GetProfile(UserId int64)(*models.AK_USERS, error){
+	return s.UserRepository.GetUserById(UserId)
 }
