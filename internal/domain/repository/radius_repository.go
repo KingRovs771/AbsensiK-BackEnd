@@ -29,14 +29,14 @@ func (r * RadiusRepository) getRadiusById(RadiusId string)(*models.Ak_Radius, er
 	return &radius, nil
 }
 
-func (r *DepartementRepo) createRadius(radius *models.Ak_Radius) error{
+func (r *RadiusRepository) createRadius(radius *models.Ak_Radius) error{
 	return r.DB.Create(radius).Error
 }
 
-func (r *DepartementRepo) updateRadius(Radius *models.Ak_Radius) error{
+func (r *RadiusRepository) updateRadius(Radius *models.Ak_Radius) error{
 	return r.DB.Save(Radius).Error
 }
 
-func (r *DepartementRepo) deleteRadius(RadiusId string) error{
+func (r *RadiusRepository) deleteRadius(RadiusId string) error{
 	return r.DB.Delete(&models.Ak_Radius{}, RadiusId ).Error
 }

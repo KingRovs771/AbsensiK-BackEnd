@@ -33,6 +33,18 @@ func (r *UserRepository) GetUserById(UserId int64) (*models.AK_USERS, error) {
 	return &users, nil
 }
 
+func (r *UserRepository) GetUserByIdUpdate(UserId int64) (*models.AK_USERS, error) {
+	var user models.AK_USERS
+	if err := r.DB.First(&user, UserId).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (r *UserRepository) UpdateUser(user *models.AK_USERS) error {
 	return r.DB.Save(user).Error
+}
+
+func (r *UserRepository) DeleteUser(UserId int64) error {
+	return r.DB.Delete(&models.AK_USERS{}, UserId).Error
 }

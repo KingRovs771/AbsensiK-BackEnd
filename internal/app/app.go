@@ -22,12 +22,12 @@ func NewApp() *App {
 	// # Repo
 	userRepo := repository.NewUserRepository(db)
 	authRepo := repository.NewAuthRepostory(db)
-	departementRepo := repository.NewDepartementsRepository(db)
+	DepartementsRepo := repository.NewDepartementsRepository(db)
 
 	// # Service
 	userService := services.NewUserService(userRepo, "secretyaa")
 	authService := services.NewAuthService(authRepo, "secretyaa")
-	departementService := services.NewDepartementService(departementRepo, "secretyaa")
+	departementService := services.NewDepartementService(DepartementsRepo, "secretyaa")
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
 	authHandler := deliveryhttp.NewAuthHandler(authService)
