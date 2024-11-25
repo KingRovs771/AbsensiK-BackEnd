@@ -76,3 +76,36 @@ func (s *RoleService) GetRolesById(RoleId string) map[string]interface{} {
 		"Role":    roles,
 	}
 }
+
+func (s *RoleService) UpdateRole(roles *models.Ak_Roles) map[string]interface{} {
+	if err := s.RoleRepository.UpdateRole(roles); err != nil {
+		return map[string]interface{}{
+			"Status":  "Error",
+			"Message": "Gagal Memperbarui Role",
+			"Error":   err.Error(),
+		}
+	}
+
+	return map[string]interface{}{
+		"Status":  "Success",
+		"Message": "Berhasil Memperbarui Roles",
+		"Roles":   roles,
+	}
+}
+
+func (s *RoleService) DeleteRole(RoleId string) map[string]interface{} {
+	if err := s.RoleRepository.DeleteRole(RoleId); err != nil {
+		return map[string]interface{}{
+			"Status ": "Error",
+			"Message": "Role Tidak Dapat di Hapus",
+			"Error":   err.Error(),
+		}
+	}
+
+	return map[string]interface{}{
+		"Status":  "Success",
+		"Message": "Berhasil Menghapus Role",
+		"Role":    RoleId,
+	}
+
+}

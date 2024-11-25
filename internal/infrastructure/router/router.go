@@ -5,7 +5,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter(userHandler *http.UserHandler, authHand *http.AuthHandler, departementHandler *http.DepartementHandler) *mux.Router {
+func NewRouter(userHandler *http.UserHandler, authHand *http.AuthHandler, departementHandler *http.DepartementHandler, roleHandler *http.RoleHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -27,10 +27,18 @@ func NewRouter(userHandler *http.UserHandler, authHand *http.AuthHandler, depart
 
 	//departements
 	router.HandleFunc("/v1/departements/insertDepartements", departementHandler.CreateDepartements).Methods("POST")
-	router.HandleFunc("/v1/departements/getAllDepartements", departementHandler.GetAllDepartements).Methods("GET")
+	router.HandleFunc("/v1/departements/AllDepartements", departementHandler.GetAllDepartements).Methods("GET")
 	router.HandleFunc("/v1/departements/getDepartementsById/{id}", departementHandler.GetDepartementsById).Methods("GET")
 	router.HandleFunc("/v1/departements/updateDepartements/{id}", departementHandler.UpdateDepartement).Methods("PUT")
 	router.HandleFunc("/v1/departements/deleteDepartements/{id}", departementHandler.DeleteDepartement).Methods("DELETE")
 
+	//roles
+	router.HandleFunc("/v1/roles/insertRoles", roleHandler.CreateRole).Methods("POST")
+	router.HandleFunc("/v1/roles/AllRoles", roleHandler.GetAllRole).Methods("GET")
+	router.HandleFunc("/v1/roles/getRolesById/{id}", roleHandler.GetRoleById).Methods("GET")
+	router.HandleFunc("/v1/roles/updateRole/{id}", roleHandler.UpdateRole).Methods("PUT")
+	router.HandleFunc("/v1/roles/deleteRole/{id}", roleHandler.DeleteRole).Methods("DELETE")
+
+	//
 	return router
 }
