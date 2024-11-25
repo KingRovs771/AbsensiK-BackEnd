@@ -14,7 +14,10 @@ func NewRoleRepository(db *gorm.DB) *RoleRepository {
 }
 
 func (r *RoleRepository) CreateRole(role *models.Ak_Roles) error {
-	return r.DB.Create(role).Error
+	if err := r.DB.Create(role).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *RoleRepository) GetAllRole() ([]models.Ak_Roles, error) {
