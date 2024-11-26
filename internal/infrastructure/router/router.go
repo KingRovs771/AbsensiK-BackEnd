@@ -39,6 +39,5 @@ func NewRouter(userHandler *http.UserHandler, authHand *http.AuthHandler, depart
 	router.HandleFunc("/v1/roles/updateRole/{id}", roleHandler.UpdateRole).Methods("PUT")
 	router.HandleFunc("/v1/roles/deleteRole/{id}", roleHandler.DeleteRole).Methods("DELETE")
 
-	//
 	return router
 }
