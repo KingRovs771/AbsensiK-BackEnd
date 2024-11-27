@@ -5,7 +5,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter(userHandler *http.UserHandler, authHand *http.AuthHandler, departementHandler *http.DepartementHandler, roleHandler *http.RoleHandler) *mux.Router {
+func NewRouter(userHandler *http.UserHandler,
+	authHand *http.AuthHandler,
+	departementHandler *http.DepartementHandler,
+	roleHandler *http.RoleHandler,
+	radiusHandler *http.RadiusHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -39,5 +43,13 @@ func NewRouter(userHandler *http.UserHandler, authHand *http.AuthHandler, depart
 	router.HandleFunc("/v1/roles/updateRole/{id}", roleHandler.UpdateRole).Methods("PUT")
 	router.HandleFunc("/v1/roles/deleteRole/{id}", roleHandler.DeleteRole).Methods("DELETE")
 
+	//radius
+	router.HandleFunc("/v1/radius/AllRadius", radiusHandler.GetAllRadius).Methods("GET")
+	router.HandleFunc("/v1/radius/insertRadius", radiusHandler.CreateRadius).Methods("POST")
+	router.HandleFunc("/v1/radius/getRadiusById/{id:[1-9]+}", radiusHandler.GetRadiusById).Methods("GET")
+	router.HandleFunc("/v1/radius/updateRaidus/{id:[1-9]+}", radiusHandler.UpdateRadius).Methods("PUT")
+	router.HandleFunc("/v1/radius/deleteRadius/{id:[1-9]+}", radiusHandler.DeleteRadius).Methods("DELETE")
+
+	//return
 	return router
 }

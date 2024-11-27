@@ -31,7 +31,7 @@ func (h *RoleHandler) CreateRole(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
 	}
 
-	response := h.RoleService.GetAllService()
+	response := h.RoleService.CreateService(&roles)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
