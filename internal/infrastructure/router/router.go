@@ -9,7 +9,8 @@ func NewRouter(userHandler *http.UserHandler,
 	authHand *http.AuthHandler,
 	departementHandler *http.DepartementHandler,
 	roleHandler *http.RoleHandler,
-	radiusHandler *http.RadiusHandler) *mux.Router {
+	radiusHandler *http.RadiusHandler,
+	schedulesHandler *http.SchedulesHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -49,6 +50,13 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/radius/getRadiusById/{id:[1-9]+}", radiusHandler.GetRadiusById).Methods("GET")
 	router.HandleFunc("/v1/radius/updateRaidus/{id:[1-9]+}", radiusHandler.UpdateRadius).Methods("PUT")
 	router.HandleFunc("/v1/radius/deleteRadius/{id:[1-9]+}", radiusHandler.DeleteRadius).Methods("DELETE")
+
+	//schedules
+	router.HandleFunc("v1/schdules/allSchedules", schedulesHandler.GetAllSchedules).Methods("GET")
+	router.HandleFunc("v1/schdules/insertSchedules", schedulesHandler.CreateSchedules).Methods("GET")
+	router.HandleFunc("v1/schdules/getSchedulesById/{id:[1-9]+}", schedulesHandler.GetSchedulesById).Methods("GET")
+	router.HandleFunc("v1/schdules/updateSchedules/{id:[1-9]+}", schedulesHandler.UpdateSchedules).Methods("PUT")
+	router.HandleFunc("v1/schdules/deleteSchedules/{id:[1-9]+}", schedulesHandler.DeleteSchedules).Methods("DELETE")
 
 	//return
 	return router
