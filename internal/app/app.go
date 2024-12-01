@@ -26,6 +26,7 @@ func NewApp() *App {
 	RoleRepo := repository.NewRoleRepository(db)
 	RadiusRepo := repository.NewRadiusRepository(db)
 	SchedulesRepo := repository.NewSchedulesRepository(db)
+	PotonganRepo := repository.NewPotonganRepository(db)
 	// # Service
 	userService := services.NewUserService(userRepo, "secretyaa")
 	authService := services.NewAuthService(authRepo, "secretyaa")
@@ -33,6 +34,7 @@ func NewApp() *App {
 	roleService := services.NewRoleService(RoleRepo)
 	radiusService := services.NewRadiusService(RadiusRepo)
 	scheduleService := services.NewSchedulesService(SchedulesRepo)
+	potonganService := services.NewPotonganService(PotonganRepo)
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
 	authHandler := deliveryhttp.NewAuthHandler(authService)
@@ -40,6 +42,7 @@ func NewApp() *App {
 	roleHandler := deliveryhttp.NewRoleHandler(roleService)
 	radiusHandler := deliveryhttp.NewRadiusHandler(radiusService)
 	schdulesHandler := deliveryhttp.NewSchedulesHandler(scheduleService)
+	potonganHandler := deliveryhttp.NewPotonganHandler(potonganService)
 	// # Auth Handlers
 
 	//router
@@ -48,7 +51,8 @@ func NewApp() *App {
 		departementHandler,
 		roleHandler,
 		radiusHandler,
-		schdulesHandler)
+		schdulesHandler,
+		potonganHandler)
 
 	return &App{Router: router}
 }

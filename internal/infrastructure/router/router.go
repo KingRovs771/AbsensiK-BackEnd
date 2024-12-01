@@ -10,7 +10,8 @@ func NewRouter(userHandler *http.UserHandler,
 	departementHandler *http.DepartementHandler,
 	roleHandler *http.RoleHandler,
 	radiusHandler *http.RadiusHandler,
-	schedulesHandler *http.SchedulesHandler) *mux.Router {
+	schedulesHandler *http.SchedulesHandler,
+	potonganHandler *http.PotonganHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
