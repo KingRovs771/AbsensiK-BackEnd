@@ -11,7 +11,8 @@ func NewRouter(userHandler *http.UserHandler,
 	roleHandler *http.RoleHandler,
 	radiusHandler *http.RadiusHandler,
 	schedulesHandler *http.SchedulesHandler,
-	potonganHandler *http.PotonganHandler) *mux.Router {
+	potonganHandler *http.PotonganHandler,
+	tipePotonganHandler *http.TipePotonganHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -53,11 +54,18 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/radius/deleteRadius/{id:[1-9]+}", radiusHandler.DeleteRadius).Methods("DELETE")
 
 	//schedules
-	router.HandleFunc("v1/schdules/allSchedules", schedulesHandler.GetAllSchedules).Methods("GET")
-	router.HandleFunc("v1/schdules/insertSchedules", schedulesHandler.CreateSchedules).Methods("GET")
-	router.HandleFunc("v1/schdules/getSchedulesById/{id:[1-9]+}", schedulesHandler.GetSchedulesById).Methods("GET")
-	router.HandleFunc("v1/schdules/updateSchedules/{id:[1-9]+}", schedulesHandler.UpdateSchedules).Methods("PUT")
-	router.HandleFunc("v1/schdules/deleteSchedules/{id:[1-9]+}", schedulesHandler.DeleteSchedules).Methods("DELETE")
+	router.HandleFunc("/v1/schdules/allSchedules", schedulesHandler.GetAllSchedules).Methods("GET")
+	router.HandleFunc("/v1/schdules/insertSchedules", schedulesHandler.CreateSchedules).Methods("GET")
+	router.HandleFunc("/v1/schdules/getSchedulesById/{id:[1-9]+}", schedulesHandler.GetSchedulesById).Methods("GET")
+	router.HandleFunc("/v1/schdules/updateSchedules/{id:[1-9]+}", schedulesHandler.UpdateSchedules).Methods("PUT")
+	router.HandleFunc("/v1/schdules/deleteSchedules/{id:[1-9]+}", schedulesHandler.DeleteSchedules).Methods("DELETE")
+
+	//tipe Potongan
+	router.HandleFunc("/v1/tipePotongan/allTipePotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")
+	router.HandleFunc("/v1/tipePotongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST")
+	router.HandleFunc("/v1/tipePotongan/getTipeById/{id:[1-9]+}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
+	router.HandleFunc("/v1/tipePotongan/UpdateTipePotongan/{id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
+	router.HandleFunc("/v1/tipePotongan/DeleteTipePotongan/{id:[1-9]+}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE")
 
 	//return
 	return router

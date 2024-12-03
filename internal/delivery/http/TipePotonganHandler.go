@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
+	"github.com/gorilla/mux"
 )
 
 type TipePotonganHandler struct {
@@ -36,13 +38,50 @@ func (h *TipePotonganHandler) CreateTipePotongan(w http.ResponseWriter, r *http.
 }
 
 func (h *TipePotonganHandler) GetTipePotonganById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	num, err := strconv.ParseInt(id, 10, 64)
 
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	response := h.TipePotonganService.GetTipePotonganById(num)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func (h *TipePotonganHandler) UpdateTipePotongan(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	num, err := strconv.ParseInt(id, 10, 64)
 
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var tipePotongan models.Ak_TipePotongan
+
+	tipePotongan.TipePotonganId = num
+
+	response := h.TipePotonganService.UpdateTipePotongan(&tipePotongan)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func (h *TipePotonganHandler) DeleteTipePotongan(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	num, err := strconv.ParseInt(id, 10, 64)
 
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	response := h.TipePotonganService.DeleteTipePotongan(num)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
