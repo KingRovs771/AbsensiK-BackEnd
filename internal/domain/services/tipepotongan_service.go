@@ -1,6 +1,9 @@
 package services
 
-import "github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/repository"
+import (
+	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
+	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/repository"
+)
 
 type TipePotonganService struct {
 	TipePotonganRepo *repository.TipePotonganRepository
@@ -10,99 +13,99 @@ func NewTipePotonganService(tipePotonganRepo *repository.TipePotonganRepository)
 	return &TipePotonganService{TipePotonganRepo: tipePotonganRepo}
 }
 
-func (s *TipePotonganService) GetAllTipePotongan() map[string]interface{}{
-	TipePotongan, err := s.TipePotonganRepository.GetAllTipePotongan()
+func (s *TipePotonganService) GetAllTipePotongan() map[string]interface{} {
+	TipePotongan, err := s.TipePotonganRepo.GetAllTipePotongan()
 
-	if err !=nil{
+	if err != nil {
 		return map[string]interface{}{
-			"Status" : "Error",
-			"Message" : "Data Tidak Ditemukan",
-			"Error" : err.Error(),
+			"Status":  "Error",
+			"Message": "Data Tidak Ditemukan",
+			"Error":   err.Error(),
 		}
 	}
 
-	if len(TipePotongan) == 0{
+	if len(TipePotongan) == 0 {
 		return map[string]interface{}{
-			"Status" : "Error",
-			"Message" : "Belum Ada Data Tipe Potongan",
+			"Status":  "Error",
+			"Message": "Belum Ada Data Tipe Potongan",
 		}
 	}
 
 	return map[string]interface{}{
-		"Status" : "Success",
-		"Message" : "Data Berhasil Ditemukan"
-		"Tipe Potongan" : TipePotongan,
+		"Status":        "Success",
+		"Message":       "Data Berhasil Ditemukan",
+		"Tipe Potongan": TipePotongan,
 	}
 }
 
-func (s *TipePotonganService) CreateTipePotongan(tipePotongan *models.Ak_TipePotongan)map[string]interface{}{
-	if err := s.TipePotonganRepository.CreateTipePotongan(tipePotongan); err != nil{
+func (s *TipePotonganService) CreateTipePotongan(tipePotongan *models.Ak_TipePotongan) map[string]interface{} {
+	if err := s.TipePotonganRepo.CreateTipePotongan(tipePotongan); err != nil {
 		return map[string]interface{}{
-			"Status" : "Error",
-			"Message" : "Gagal Menginput Data Tipe Potongan",
-			"Error" : err.Error(),
+			"Status":  "Error",
+			"Message": "Gagal Menginput Data Tipe Potongan",
+			"Error":   err.Error(),
 		}
 	}
 
-	if tipePotongan.NamaPotongan == "" || tipePotongan.NilaiPotongan == 0{
+	if tipePotongan.NamaPotongan == "" || tipePotongan.NilaiPotongan == 0 {
 		return map[string]interface{}{
-			"Status" : "Error",
-			"Message" : "Tolong Lengkapi Data Potongan",
+			"Status":  "Error",
+			"Message": "Tolong Lengkapi Data Potongan",
 		}
 	}
 
 	return map[string]interface{}{
-		"Status" : "Success",
-		"Message" : "Data Berhasil Di Inputkan",
-		"Tipe Potongan" : tipePotongan
+		"Status":        "Success",
+		"Message":       "Data Berhasil Di Inputkan",
+		"Tipe Potongan": tipePotongan,
 	}
 }
 
-func (s *TipePotonganService) GetTipePotonganById(TipePotonganId int64) map[string]interface{}{
-	tipePotongan, err := s.TipePotonganRepository.GetTipePotonganById(TipePotonganId)
+func (s *TipePotonganService) GetTipePotonganById(TipePotonganId int64) map[string]interface{} {
+	tipePotongan, err := s.TipePotonganRepo.GetTipePotonganById(TipePotonganId)
 
-	if err !=nil{
+	if err != nil {
 		return map[string]interface{}{
-			"Status" : "Error",
-			"Message" : "Data Tidak Ditemukan, silakan check lagi",
-			"Error" : err.Error(),
+			"Status":  "Error",
+			"Message": "Data Tidak Ditemukan, silakan check lagi",
+			"Error":   err.Error(),
 		}
 	}
 
 	return map[string]interface{}{
-		"Status" : "Success",
-		"Message" : "Data Berhasil Ditemukan",
-		"Tipe Potongan" : tipePotongan
+		"Status":        "Success",
+		"Message":       "Data Berhasil Ditemukan",
+		"Tipe Potongan": tipePotongan,
 	}
 }
 
-func (s *TipePotonganService) UpdateTipePotongan(TipePotongan *models.Ak_TipePotongan)map[string]interface{}{
-	if err := s.TipePotonganRepository.UpdateTipePotongan(TipePotongan); err !=nil{
+func (s *TipePotonganService) UpdateTipePotongan(TipePotongan *models.Ak_TipePotongan) map[string]interface{} {
+	if err := s.TipePotonganRepo.UpdateTipePotongan(TipePotongan); err != nil {
 		return map[string]interface{}{
-			"Status" : "Error",
-			"Message" : "Data Tipe Potongan Tidak Berhasil Di update",
-			"Error" : err.Error(),
+			"Status":  "Error",
+			"Message": "Data Tipe Potongan Tidak Berhasil Di update",
+			"Error":   err.Error(),
 		}
 	}
 
 	return map[string]interface{}{
-		"Status" : "Success",
-		"Message" : "Data Berhasil Di Update Silakan Check Data",
-		"Tipe Potongan" : TipePotongan,
+		"Status":        "Success",
+		"Message":       "Data Berhasil Di Update Silakan Check Data",
+		"Tipe Potongan": TipePotongan,
 	}
 }
 
-func (s *TipePotonganService) DeleteTipePotongan(TipePotonganId int64) map[string]interface{}{
-	if err := s.TipePotonganRepository.DeleteTipePotongan(TipePotonganId); err !=nil{
+func (s *TipePotonganService) DeleteTipePotongan(TipePotonganId int64) map[string]interface{} {
+	if err := s.TipePotonganRepo.DeleteTipePotongan(TipePotonganId); err != nil {
 		return map[string]interface{}{
-			"Status" : "Error", 
-			"Message" : "Data Tidak Berhasil Di Update",
-			"Error" : err.Error(),
+			"Status":  "Error",
+			"Message": "Data Tidak Berhasil Di Update",
+			"Error":   err.Error(),
 		}
 	}
 
 	return map[string]interface{}{
-		"Status" : "Success",
-		"Message" : "Data Berhasil Di Hapus"
+		"Status":  "Success",
+		"Message": "Data Berhasil Di Hapus",
 	}
 }
