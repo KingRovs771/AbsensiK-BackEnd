@@ -63,7 +63,7 @@ func (h *SchedulesHandler) UpdateSchedules(w http.ResponseWriter, r *http.Reques
 
 	schdules.SchedulesId = num
 
-	if err := json.NewDecoder(r.Body).Decode(schdules); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&schdules); err != nil {
 		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
 		return
 	}

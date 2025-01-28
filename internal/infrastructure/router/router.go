@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/delivery/http"
+	"github.com/KingRovs771/AbsensiK-BackEnd/internal/delivery/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -12,7 +13,8 @@ func NewRouter(userHandler *http.UserHandler,
 	radiusHandler *http.RadiusHandler,
 	schedulesHandler *http.SchedulesHandler,
 	potonganHandler *http.PotonganHandler,
-	tipePotonganHandler *http.TipePotonganHandler) *mux.Router {
+	tipePotonganHandler *http.TipePotonganHandler,
+	izinHandler *http.IzinHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -64,9 +66,18 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/tipePotongan/allTipePotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")
 	router.HandleFunc("/v1/tipePotongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST")
 	router.HandleFunc("/v1/tipePotongan/getTipeById/{id:[1-9]+}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
-	router.HandleFunc("/v1/tipePotongan/UpdateTipePotongan/{id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
-	router.HandleFunc("/v1/tipePotongan/DeleteTipePotongan/{id:[1-9]+}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE")
+	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
+	router.HandleFunc("/v1/tipePotongan/deleteTipePotongan/{id:[1-9]+}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE")
+
+	//izin
+	router.HandleFunc("/v1/izin/allIzin", izinHandler.GetAllIzin).Methods("GET")
+	router.HandleFunc("/v1/izin/insertIzin", izinHandler.CreateIzin).Methods("POST")
+	router.HandleFunc("/v1/izin/getIzinById", izinHandler.GetIzinById).Methods("GET")
+	router.HandleFunc("/v1/izin/updateIzin", izinHandler.UpdateIzin).Methods("PUT")
+	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
 
 	//return
+
+	router.Use(middleware.CORSMiddleware())
 	return router
 }

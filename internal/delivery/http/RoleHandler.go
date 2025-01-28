@@ -19,8 +19,12 @@ func NewRoleHandler(roleService *services.RoleService) *RoleHandler {
 }
 
 func (h *RoleHandler) GetAllRole(w http.ResponseWriter, r *http.Request) {
+
 	response := h.RoleService.GetAllService()
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 

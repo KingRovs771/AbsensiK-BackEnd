@@ -13,23 +13,23 @@ func NewTipePotonganRepository(db *gorm.DB) *TipePotonganRepository {
 	return &TipePotonganRepository{DB: db}
 }
 
-func (r *TipePotonganRepository) GetAllTipePotongan() ([]models.Ak_TipePotongan, error) {
-	var tipePotongan []models.Ak_TipePotongan
+func (r *TipePotonganRepository) GetAllTipePotongan() ([]models.Ak_TipePotongans, error) {
+	var tipePotongan []models.Ak_TipePotongans
 	if err := r.DB.Find(&tipePotongan).Error; err != nil {
 		return nil, err
 	}
 	return tipePotongan, nil
 }
 
-func (r *TipePotonganRepository) CreateTipePotongan(tipePotongan *models.Ak_TipePotongan) error {
+func (r *TipePotonganRepository) CreateTipePotongan(tipePotongan *models.Ak_TipePotongans) error {
 	if err := r.DB.Create(tipePotongan).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *TipePotonganRepository) GetTipePotonganById(TipePotonganId int64) (*models.Ak_TipePotongan, error) {
-	var tipePotongan models.Ak_TipePotongan
+func (r *TipePotonganRepository) GetTipePotonganById(TipePotonganId int64) (*models.Ak_TipePotongans, error) {
+	var tipePotongan models.Ak_TipePotongans
 	if err := r.DB.First(&tipePotongan, TipePotonganId).Error; err != nil {
 		return nil, err
 	}
@@ -37,10 +37,10 @@ func (r *TipePotonganRepository) GetTipePotonganById(TipePotonganId int64) (*mod
 	return &tipePotongan, nil
 }
 
-func (r *TipePotonganRepository) UpdateTipePotongan(tipePotongan *models.Ak_TipePotongan) error {
+func (r *TipePotonganRepository) UpdateTipePotongan(tipePotongan *models.Ak_TipePotongans) error {
 	return r.DB.Save(tipePotongan).Error
 }
 
 func (r *TipePotonganRepository) DeleteTipePotongan(TipePotonganId int64) error {
-	return r.DB.Delete(&models.Ak_TipePotongan{}, TipePotonganId).Error
+	return r.DB.Delete(&models.Ak_TipePotongans{}, TipePotonganId).Error
 }

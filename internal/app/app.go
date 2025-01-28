@@ -28,6 +28,7 @@ func NewApp() *App {
 	SchedulesRepo := repository.NewSchedulesRepository(db)
 	PotonganRepo := repository.NewPotonganRepository(db)
 	TipePotonganRepo := repository.NewTipePotonganRepository(db)
+	izinRepo := repository.NewIzinRepository(db)
 	// # Service
 	userService := services.NewUserService(userRepo, "secretyaa")
 	authService := services.NewAuthService(authRepo, "secretyaa")
@@ -37,6 +38,7 @@ func NewApp() *App {
 	scheduleService := services.NewSchedulesService(SchedulesRepo)
 	potonganService := services.NewPotonganService(PotonganRepo)
 	tipePotonganService := services.NewTipePotonganService(TipePotonganRepo)
+	izinService := services.NewIzinService(izinRepo)
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
 	authHandler := deliveryhttp.NewAuthHandler(authService)
@@ -46,7 +48,7 @@ func NewApp() *App {
 	schdulesHandler := deliveryhttp.NewSchedulesHandler(scheduleService)
 	potonganHandler := deliveryhttp.NewPotonganHandler(potonganService)
 	tipePotonganHandler := deliveryhttp.NewTipePotonganHandler(tipePotonganService)
-	// # Auth Handlers
+	izinHandler := deliveryhttp.NewIzinHandler(izinService)
 
 	//router
 	router := router.NewRouter(userHandler,
@@ -56,7 +58,8 @@ func NewApp() *App {
 		radiusHandler,
 		schdulesHandler,
 		potonganHandler,
-		tipePotonganHandler)
+		tipePotonganHandler,
+		izinHandler)
 
 	return &App{Router: router}
 }

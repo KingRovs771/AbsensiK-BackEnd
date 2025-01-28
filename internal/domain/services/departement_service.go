@@ -37,9 +37,9 @@ func (s *DepartementService) GetDepartementsAll() map[string]interface{} {
 	}
 
 	return map[string]interface{}{
-		"Status":      "Success",
-		"Message":     "Berhasil Mendapatkan Data Departements",
-		"Departments": departements,
+		"Status":  "Success",
+		"Message": "Berhasil Mendapatkan Data Departements",
+		"Data":    departements,
 	}
 }
 
@@ -53,9 +53,9 @@ func (s *DepartementService) CreateDepartements(departement *models.Ak_Departmen
 	}
 
 	return map[string]interface{}{
-		"Status":      "Success",
-		"Message":     "Berhasil Menambahkan Departements Baru",
-		"Departemens": departement,
+		"Status":  "Success",
+		"Message": "Berhasil Menambahkan Departements Baru",
+		"Data":    departement,
 	}
 }
 
@@ -70,9 +70,9 @@ func (s *DepartementService) GetDepartementsById(DepartementsId string) map[stri
 		}
 	}
 	return map[string]interface{}{
-		"Status":       "Success",
-		"Message":      "Berhasil Mendapatkan Departements",
-		"Departements": departements,
+		"Status":  "Success",
+		"Message": "Berhasil Mendapatkan Departements",
+		"Data":    departements,
 	}
 }
 
@@ -86,9 +86,9 @@ func (s *DepartementService) UpdateDepartements(departements *models.Ak_Departme
 	}
 
 	return map[string]interface{}{
-		"Status":       "Success",
-		"Message":      "Berhasil Memperbarui Departements",
-		"Departements": departements,
+		"Status":  "Success",
+		"Message": "Berhasil Memperbarui Departements",
+		"Data":    departements,
 	}
 }
 

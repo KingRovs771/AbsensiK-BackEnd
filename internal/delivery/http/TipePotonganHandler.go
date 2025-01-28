@@ -26,7 +26,7 @@ func (h *TipePotonganHandler) GetAllTipePotongan(w http.ResponseWriter, r *http.
 }
 
 func (h *TipePotonganHandler) CreateTipePotongan(w http.ResponseWriter, r *http.Request) {
-	var TipePotongan models.Ak_TipePotongan
+	var TipePotongan models.Ak_TipePotongans
 	if err := json.NewDecoder(r.Body).Decode(&TipePotongan); err != nil {
 		log.Println("Invalid Payload Request")
 		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
@@ -62,7 +62,7 @@ func (h *TipePotonganHandler) UpdateTipePotongan(w http.ResponseWriter, r *http.
 		return
 	}
 
-	var tipePotongan models.Ak_TipePotongan
+	var tipePotongan models.Ak_TipePotongans
 
 	tipePotongan.TipePotonganId = num
 

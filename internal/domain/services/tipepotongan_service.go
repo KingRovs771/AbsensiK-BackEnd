@@ -38,7 +38,7 @@ func (s *TipePotonganService) GetAllTipePotongan() map[string]interface{} {
 	}
 }
 
-func (s *TipePotonganService) CreateTipePotongan(tipePotongan *models.Ak_TipePotongan) map[string]interface{} {
+func (s *TipePotonganService) CreateTipePotongan(tipePotongan *models.Ak_TipePotongans) map[string]interface{} {
 	if err := s.TipePotonganRepo.CreateTipePotongan(tipePotongan); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
@@ -79,7 +79,7 @@ func (s *TipePotonganService) GetTipePotonganById(TipePotonganId int64) map[stri
 	}
 }
 
-func (s *TipePotonganService) UpdateTipePotongan(TipePotongan *models.Ak_TipePotongan) map[string]interface{} {
+func (s *TipePotonganService) UpdateTipePotongan(TipePotongan *models.Ak_TipePotongans) map[string]interface{} {
 	if err := s.TipePotonganRepo.UpdateTipePotongan(TipePotongan); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",

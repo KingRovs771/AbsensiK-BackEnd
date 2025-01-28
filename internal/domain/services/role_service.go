@@ -33,7 +33,7 @@ func (s *RoleService) GetAllService() map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Messafe": "Berhasil Mendapatkan Data Role",
-		"Roles":   roles,
+		"Data":    roles,
 	}
 }
 
@@ -55,7 +55,7 @@ func (s *RoleService) CreateService(role *models.Ak_Roles) map[string]interface{
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Membuat Role Baru",
-		"Role":    role,
+		"Data":    role,
 	}
 
 }
@@ -73,7 +73,7 @@ func (s *RoleService) GetRolesById(RoleId string) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Mendapatkan Data Role",
-		"Role":    roles,
+		"Data":    roles,
 	}
 }
 
@@ -89,7 +89,7 @@ func (s *RoleService) UpdateRole(roles *models.Ak_Roles) map[string]interface{} 
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Memperbarui Roles",
-		"Roles":   roles,
+		"Data":    roles,
 	}
 }
 
@@ -105,7 +105,7 @@ func (s *RoleService) DeleteRole(RoleId string) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Menghapus Role",
-		"Role":    RoleId,
+		"Data":    RoleId,
 	}
 
 }
