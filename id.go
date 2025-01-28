@@ -1,7 +1,7 @@
-package absensikbackend
+package main
 
 import "fmt"
 
-func absensikbackend() {
+func main() {
 	fmt.Println("Hello This Is API Backend AbsensiK-Backend")
 }
