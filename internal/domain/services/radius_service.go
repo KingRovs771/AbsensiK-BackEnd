@@ -32,7 +32,7 @@ func (s *RadiusService) GetAllRadius() map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Mendapatkan Data Radius",
-		"Radius":  radius,
+		"Data":    radius,
 	}
 }
 
@@ -55,7 +55,7 @@ func (s *RadiusService) CreateRadius(radius *models.Ak_Radius) map[string]interf
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Sukses Membuat Radius Baru",
-		"Radius":  radius,
+		"Data":    radius,
 	}
 }
 
@@ -73,7 +73,7 @@ func (s *RadiusService) GetRadiusById(RadiusId int64) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Pengguna ditemukan",
-		"Radius":  radius,
+		"Data":    radius,
 	}
 }
 func (s *RadiusService) UpdateRadius(radius *models.Ak_Radius) map[string]interface{} {
@@ -88,7 +88,7 @@ func (s *RadiusService) UpdateRadius(radius *models.Ak_Radius) map[string]interf
 	return map[string]interface{}{
 		"Status":  "Error",
 		"Message": "Data Radius Berhasil Terupdate",
-		"Radius":  radius,
+		"Data":    radius,
 	}
 }
 
