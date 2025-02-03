@@ -11,15 +11,15 @@ type AuthRepository struct {
 	DB *gorm.DB
 }
 
-func NewAuthRepostory(db *gorm.DB) *AuthRepository{
-	return &AuthRepository{DB : db}
+func NewAuthRepostory(db *gorm.DB) *AuthRepository {
+	return &AuthRepository{DB: db}
 }
 
-func (r *AuthRepository) GetUserByUsername(username string)(*models.AK_USERS, error){
-	var Users models.AK_USERS
-	err:=r.DB.Where("username = ?", username).First(&Users).Error
-	if err != nil{
-		if err == gorm.ErrRecordNotFound{
+func (r *AuthRepository) GetUserByUsername(username string) (*models.Ak_Users, error) {
+	var Users models.Ak_Users
+	err := r.DB.Where("username = ?", username).First(&Users).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
 			log.Println("User Not Found :", username)
 			return nil, nil
 		}

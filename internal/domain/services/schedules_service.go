@@ -28,9 +28,9 @@ func (s *SchedulesService) GetAllSchedules() map[string]interface{} {
 		}
 	}
 	return map[string]interface{}{
-		"Status":    "Success",
-		"Message":   "Data Schedules Ditemukan",
-		"Schedules": schedules,
+		"Status":  "Success",
+		"Message": "Data Schedules Ditemukan",
+		"Data":    schedules,
 	}
 }
 
@@ -51,9 +51,9 @@ func (s *SchedulesService) CreateSchedules(schedules *models.Ak_Schedules) map[s
 	}
 
 	return map[string]interface{}{
-		"Status":    "Success",
-		"Message":   "Data Schedules Berhasil Disimpan",
-		"Schedules": schedules,
+		"Status":  "Success",
+		"Message": "Data Schedules Berhasil Disimpan",
+		"Data":    schedules,
 	}
 }
 

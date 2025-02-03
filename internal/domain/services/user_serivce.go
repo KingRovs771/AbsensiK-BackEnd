@@ -16,7 +16,7 @@ func NewUserService(userRepo *repository.UserRepository, secretKey string) *User
 		SecretKey: secretKey}
 }
 
-func (s *UserService) CreateUser(user *models.AK_USERS) map[string]interface{} {
+func (s *UserService) CreateUser(user *models.Ak_Users) map[string]interface{} {
 	hasedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return map[string]interface{}{
@@ -37,7 +37,7 @@ func (s *UserService) CreateUser(user *models.AK_USERS) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Membuat Pengguna Baru",
-		"Users":   user,
+		"Data":    user,
 	}
 }
 
@@ -61,11 +61,11 @@ func (s *UserService) GetAllUsers() map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Mendapatkan Semua Users",
-		"Users":   users,
+		"Data":    users,
 	}
 }
 
-func (s *UserService) GetProfile(UserId int64) (*models.AK_USERS, error) {
+func (s *UserService) GetProfile(UserId int64) (*models.Ak_Users, error) {
 	return s.UserRepository.GetUserById(UserId)
 }
 
@@ -81,11 +81,11 @@ func (s *UserService) GetUsersById(UserId int64) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Mendapatkan Pengguna",
-		"User":    user,
+		"Data":    user,
 	}
 }
 
-func (s *UserService) UpdateUser(user *models.AK_USERS) map[string]interface{} {
+func (s *UserService) UpdateUser(user *models.Ak_Users) map[string]interface{} {
 	if err := s.UserRepository.UpdateUser(user); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
@@ -96,7 +96,7 @@ func (s *UserService) UpdateUser(user *models.AK_USERS) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Memperbarui Pengguna",
-		"User":    user,
+		"Data":    user,
 	}
 }
 

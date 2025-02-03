@@ -5,3 +5,7 @@ type Ak_Departments struct {
 	NameDepartments string `gorm:"type:varchar(30)" json:"name_departments"`
 	Description     string `gorm:"type:text" json:"description"`
 }
+
+func (Ak_Departments) TableName() string {
+	return "absensi_karyawan.ak_departments"
+}

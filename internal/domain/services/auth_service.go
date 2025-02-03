@@ -13,21 +13,21 @@ import (
 
 type AuthService struct {
 	AuthRepository *repository.AuthRepository
-	SecretKey string
+	SecretKey      string
 }
 
-func NewAuthService(authRepo *repository.AuthRepository, secretKey string) *AuthService{
+func NewAuthService(authRepo *repository.AuthRepository, secretKey string) *AuthService {
 	return &AuthService{
 		AuthRepository: authRepo,
-		SecretKey: secretKey,
+		SecretKey:      secretKey,
 	}
 }
 
-func (s *AuthService)GenerateToken(user *models.AK_USERS)(string, error){
+func (s *AuthService) GenerateToken(user *models.Ak_Users) (string, error) {
 	claims := jwt.MapClaims{
-		"user_id" : user.UserId,
-		"username" : user.Username,
-		"exp" : time.Now().Add(time.Hour * 72).Unix(),
+		"user_id":  user.UserId,
+		"username": user.Username,
+		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -40,24 +40,23 @@ func (s *AuthService)GenerateToken(user *models.AK_USERS)(string, error){
 	return tokenString, nil
 }
 
-func (s *AuthService) Authenticate(username, password string)(string, error){
+func (s *AuthService) Authenticate(username, password string) (string, error) {
 	user, err := s.AuthRepository.GetUserByUsername(username)
 	if err != nil {
 		log.Println("Error Fetching User: ", err)
 		return "", err
 	}
 
-	if user == nil{
+	if user == nil {
 		log.Println("User Not Found :", username)
 		return "", gorm.ErrRecordNotFound
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil{
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return "", err
 	}
 
- 
-	token, err :=s.GenerateToken(user)
+	token, err := s.GenerateToken(user)
 	if err != nil {
 		log.Println("Error Generating Token : ", err)
 		return "", err

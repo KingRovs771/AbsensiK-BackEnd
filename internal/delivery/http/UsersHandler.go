@@ -24,7 +24,7 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	var user models.AK_USERS
+	var user models.Ak_Users
 
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -60,7 +60,7 @@ func (h *UserHandler) GetUserByIdUpdate(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	var user models.AK_USERS
+	var user models.Ak_Users
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
