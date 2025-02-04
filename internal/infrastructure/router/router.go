@@ -42,11 +42,11 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/departements/deleteDepartements/{id}", departementHandler.DeleteDepartement).Methods("DELETE")
 
 	//roles
-	router.HandleFunc("/v1/roles/insertRoles", roleHandler.CreateRole).Methods("POST")
+	router.HandleFunc("/v1/roles/insertRoles", roleHandler.CreateRole).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/roles/AllRoles", roleHandler.GetAllRole).Methods("GET")
 	router.HandleFunc("/v1/roles/getRolesById/{id}", roleHandler.GetRoleById).Methods("GET")
 	router.HandleFunc("/v1/roles/updateRole/{id}", roleHandler.UpdateRole).Methods("PUT")
-	router.HandleFunc("/v1/roles/deleteRole/{id}", roleHandler.DeleteRole).Methods("DELETE")
+	router.HandleFunc("/v1/roles/deleteRole/{role_id}", roleHandler.DeleteRole).Methods("DELETE", "OPTIONS")
 
 	//radius
 	router.HandleFunc("/v1/radius/AllRadius", radiusHandler.GetAllRadius).Methods("GET")
@@ -77,7 +77,6 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
 
 	//return
-
 	router.Use(middleware.CORSMiddleware())
 	return router
 }

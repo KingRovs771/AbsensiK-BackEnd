@@ -41,5 +41,5 @@ func (r *RoleRepository) UpdateRole(role *models.Ak_Roles) error {
 }
 
 func (r *RoleRepository) DeleteRole(RoleId string) error {
-	return r.DB.Delete(&models.Ak_Roles{}, RoleId).Error
+	return r.DB.Where("role_id= ?", RoleId).Delete(&models.Ak_Roles{}).Error
 }
