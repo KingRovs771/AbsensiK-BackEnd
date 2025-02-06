@@ -37,10 +37,11 @@ func (s *RadiusService) GetAllRadius() map[string]interface{} {
 }
 
 func (s *RadiusService) CreateRadius(radius *models.Ak_Radius) map[string]interface{} {
-	if radius.NameLocation == "" || radius.Latitude == 0 || radius.Longitude == 0 || radius.Radius == 0 {
+	if radius.NameLocation == "" || radius.Latitude == "" || radius.Longitude == "" {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Silakan Isi Kelengkapan Data Radius, Tidak boleh ada yang kosong",
+			"Data":    radius,
 		}
 	}
 

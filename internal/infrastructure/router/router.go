@@ -50,7 +50,7 @@ func NewRouter(userHandler *http.UserHandler,
 
 	//radius
 	router.HandleFunc("/v1/radius/AllRadius", radiusHandler.GetAllRadius).Methods("GET")
-	router.HandleFunc("/v1/radius/insertRadius", radiusHandler.CreateRadius).Methods("POST")
+	router.HandleFunc("/v1/radius/insertRadius", radiusHandler.CreateRadius).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/radius/getRadiusById/{id:[1-9]+}", radiusHandler.GetRadiusById).Methods("GET")
 	router.HandleFunc("/v1/radius/updateRaidus/{id:[1-9]+}", radiusHandler.UpdateRadius).Methods("PUT")
 	router.HandleFunc("/v1/radius/deleteRadius/{id:[1-9]+}", radiusHandler.DeleteRadius).Methods("DELETE")
