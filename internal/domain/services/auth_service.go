@@ -27,6 +27,7 @@ func (s *AuthService) GenerateToken(user *models.Ak_Users) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id":  user.UserId,
 		"username": user.Username,
+		"role":     user.Role.NameRole,
 		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	}
 
@@ -62,4 +63,18 @@ func (s *AuthService) Authenticate(username, password string) (string, error) {
 		return "", err
 	}
 	return token, nil
+}
+
+func (s *AuthService) GetUserFromToken(tokenString string) (*models.Ak_Users, error) {
+	claims := &jwt.MapClaims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(s.SecretKey), nil
+	})
+
+	if err != nil || !token.Valid {
+		return nil, err
+
+	}
+	username := (*claims)["username"].(string)
+	return s.AuthRepository.GetUserByUsername(username)
 }

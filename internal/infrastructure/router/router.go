@@ -22,11 +22,11 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/check", mainHandler.GetDomain).Methods("GET")
 
 	// Get Profile Mobile
-	router.HandleFunc("/users/getProfile", userHandler.GetProfile).Methods("GET")
 
 	//Login  Auth
-	router.HandleFunc("/v1/auth/login", authHand.Login).Methods("POST")
-
+	router.HandleFunc("/v1/auth/login", authHand.Login).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/auth/logout", authHand.Logout).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/auth/getInfo", authHand.GetUserInfo).Methods("GET", "OPTIONS")
 	//Users
 	router.HandleFunc("/v1/users/insertUsers", userHandler.CreateUser).Methods("POST")
 	router.HandleFunc("/v1/users/allUsers", userHandler.GetAllUsers).Methods("GET")

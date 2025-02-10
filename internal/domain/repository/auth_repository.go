@@ -17,7 +17,7 @@ func NewAuthRepostory(db *gorm.DB) *AuthRepository {
 
 func (r *AuthRepository) GetUserByUsername(username string) (*models.Ak_Users, error) {
 	var Users models.Ak_Users
-	err := r.DB.Where("username = ?", username).First(&Users).Error
+	err := r.DB.Preload("Role").Where("username = ?", username).First(&Users).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			log.Println("User Not Found :", username)
