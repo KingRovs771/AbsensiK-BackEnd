@@ -36,13 +36,14 @@ func NewAuthHandler(authService *services.AuthService) *AuthHandler {
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Println("Error Decoding Credentials:", err)
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 
-	token, err := h.AuthService.Authenticate(req.Username, req.Password)
+	tokenString, err := h.AuthService.Authenticate(req.Username, req.Password)
 	if err != nil {
-		log.Println("Error Authenricating User : ", err)
+		log.Println("Error Authenticating User : ", err)
 		http.Error(w, "Invalid Username or Password", http.StatusUnauthorized)
 		return
 	}
@@ -51,23 +52,17 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
-		Value:    token,
+		Value:    tokenString,
 		Expires:  time.Now().Add(24 * time.Hour),
 		HttpOnly: true,
 	})
 
-	response := map[string]string{
+	json.NewEncoder(w).Encode(map[string]string{
 		"Status":   "Success",
-		"Token":    token,
+		"Token":    tokenString,
 		"Username": req.Username,
 		"Message":  "Login Success",
-	}
-
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	})
 }
 
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
@@ -84,9 +79,6 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
