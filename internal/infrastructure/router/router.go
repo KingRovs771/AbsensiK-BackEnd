@@ -57,7 +57,7 @@ func NewRouter(userHandler *http.UserHandler,
 
 	//schedules
 	router.HandleFunc("/v1/schdules/allSchedules", schedulesHandler.GetAllSchedules).Methods("GET")
-	router.HandleFunc("/v1/schdules/insertSchedules", schedulesHandler.CreateSchedules).Methods("GET")
+	router.HandleFunc("/v1/schdules/insertSchedules", schedulesHandler.CreateSchedules).Methods("POST")
 	router.HandleFunc("/v1/schdules/getSchedulesById/{id:[1-9]+}", schedulesHandler.GetSchedulesById).Methods("GET")
 	router.HandleFunc("/v1/schdules/updateSchedules/{id:[1-9]+}", schedulesHandler.UpdateSchedules).Methods("PUT")
 	router.HandleFunc("/v1/schdules/deleteSchedules/{id:[1-9]+}", schedulesHandler.DeleteSchedules).Methods("DELETE")

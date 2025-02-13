@@ -1,6 +1,10 @@
 package services
 
 import (
+	"errors"
+	"log"
+	"time"
+
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/repository"
 )
@@ -34,12 +38,29 @@ func (s *SchedulesService) GetAllSchedules() map[string]interface{} {
 	}
 }
 
-func (s *SchedulesService) CreateSchedules(schedules *models.Ak_Schedules) map[string]interface{} {
-	if schedules.SchedulesId == 0 || schedules.Day == "" {
+func (s *SchedulesService) CreateSchedules(startTime, endTime, userId, day string, isActive int) map[string]interface{} {
+
+	if err := s.ValidateTime(startTime); err != nil {
 		return map[string]interface{}{
-			"Status ": "Error",
-			"Message": "Data Belum Di isi Lengkap",
+			"Status":  "Error",
+			"Message": "Invalid Start Time Format",
+			"Error":   err.Error(),
 		}
+	}
+	if err := s.ValidateTime(startTime); err != nil {
+		return map[string]interface{}{
+			"Status":  "Error",
+			"Message": "Invalid Start Time Format",
+			"Error":   err.Error(),
+		}
+	}
+
+	schedules := &models.Ak_Schedules{
+		UserId:    userId,
+		StartTime: startTime,
+		EndTime:   endTime,
+		Day:       day,
+		IsActive:  isActive,
 	}
 
 	if err := s.SchedulesRepository.CreateSchedules(schedules); err != nil {
@@ -55,6 +76,16 @@ func (s *SchedulesService) CreateSchedules(schedules *models.Ak_Schedules) map[s
 		"Message": "Data Schedules Berhasil Disimpan",
 		"Data":    schedules,
 	}
+}
+
+func (s *SchedulesService) ValidateTime(timeStr string) error {
+	layout := "15:04"
+	_, err := time.Parse(layout, timeStr)
+	if err != nil {
+		log.Println("Invalid Time Format:", err)
+		return errors.New("Invalid time format")
+	}
+	return nil
 }
 
 func (s *SchedulesService) GetSchedulesById(SchedulesId int64) map[string]interface{} {

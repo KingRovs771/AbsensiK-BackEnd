@@ -26,6 +26,5 @@ func (r *AuthRepository) GetUserByUsername(username string) (*models.Ak_Users, e
 		log.Println("Error Fetching User :", err)
 		return nil, err
 	}
-	log.Println("User Fetched success :", Users.Username)
 	return &Users, nil
 }

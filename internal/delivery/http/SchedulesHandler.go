@@ -26,13 +26,13 @@ func (h *SchedulesHandler) GetAllSchedules(w http.ResponseWriter, r *http.Reques
 }
 
 func (h *SchedulesHandler) CreateSchedules(w http.ResponseWriter, r *http.Request) {
-	var schdules models.Ak_Schedules
-	if err := json.NewDecoder(r.Body).Decode(&schdules); err != nil {
+	var schedules models.Ak_Schedules
+	if err := json.NewDecoder(r.Body).Decode(&schedules); err != nil {
 		log.Println("Invalid Payload Request")
 		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
 	}
 
-	response := h.SchedulesService.CreateSchedules(&schdules)
+	response := h.SchedulesService.CreateSchedules(schedules.StartTime, schedules.EndTime, schedules.UserId, schedules.Day, schedules.IsActive)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

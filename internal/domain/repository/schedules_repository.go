@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"log"
+
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"gorm.io/gorm"
 )
@@ -16,7 +18,11 @@ func NewSchedulesRepository(db *gorm.DB) *SchedulesRepository {
 func (r *SchedulesRepository) GetAllSchedules() ([]models.Ak_Schedules, error) {
 	var schedules []models.Ak_Schedules
 
-	if err := r.DB.Find(&schedules).Error; err != nil {
+	err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
+		return db.Select("user_id, full_name")
+	}).Find(&schedules).Error
+	if err != nil {
+		log.Println("Error Fetching Schdules", err)
 		return nil, err
 	}
 	return schedules, nil
