@@ -41,5 +41,5 @@ func (r *DepartementsRepository) UpdateDepartement(departements *models.Ak_Depar
 }
 
 func (r *DepartementsRepository) DeleteDepartement(DepartementsId string) error {
-	return r.DB.Delete(&models.Ak_Departments{}, DepartementsId).Error
+	return r.DB.Where("departments_id= ?", DepartementsId).Delete(&models.Ak_Departments{}).Error
 }

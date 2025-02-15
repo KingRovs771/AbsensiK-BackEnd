@@ -31,7 +31,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if user.Username == "" || user.Password == "" || user.Address == "" || user.RoleId == "" || user.DepartementId == "" || user.FullName == "" {
+	if user.Username == "" || user.Password == "" || user.Address == "" || user.RoleId == "" || user.DepartmentsId == "" || user.FullName == "" {
 		log.Println("Data Pengguna Tidak Lengkap")
 		http.Error(w, "Data Pengguna Tidak Lengkap", http.StatusBadRequest)
 		return

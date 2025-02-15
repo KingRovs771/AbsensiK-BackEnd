@@ -17,9 +17,10 @@ func NewSchedulesRepository(db *gorm.DB) *SchedulesRepository {
 
 func (r *SchedulesRepository) GetAllSchedules() ([]models.Ak_Schedules, error) {
 	var schedules []models.Ak_Schedules
-
 	err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
-		return db.Select("user_id, full_name")
+		return db.Preload("Department", func(db *gorm.DB) *gorm.DB {
+			return db.Select("departments_id, name_departments")
+		}).Select("user_uid, full_name, departments_id")
 	}).Find(&schedules).Error
 	if err != nil {
 		log.Println("Error Fetching Schdules", err)
@@ -44,6 +45,6 @@ func (r *SchedulesRepository) GetSchedulesById(SchedulesId int64) (*models.Ak_Sc
 func (r *SchedulesRepository) UpdateSchedules(schedules *models.Ak_Schedules) error {
 	return r.DB.Save(schedules).Error
 }
-func (r *SchedulesRepository) DeleteSchedules(SchedulesId int64) error {
-	return r.DB.Delete(&models.Ak_Schedules{}, SchedulesId).Error
+func (r *SchedulesRepository) DeleteSchedules(ScheduleId int64) error {
+	return r.DB.Delete(&models.Ak_Schedules{}, ScheduleId).Error
 }

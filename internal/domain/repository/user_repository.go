@@ -26,13 +26,13 @@ func (r *UserRepository) CreateUser(user *models.Ak_Users) error {
 	return r.DB.Create(user).Error
 }
 
-func (r *UserRepository) GetAllUsers() ([]GetAllUserTable, error) {
-	var users []GetAllUserTable
-	if err := r.DB.Table("absensi_karyawan.ak_users").
-		Select("absensi_karyawan.ak_users.user_id, absensi_karyawan.ak_users.full_name, absensi_karyawan.ak_users.departement_id, absensi_karyawan.ak_users.role_id, absensi_karyawan.ak_departments.name_departments, absensi_karyawan.ak_roles.name_role").
-		Joins("JOIN absensi_karyawan.ak_roles ON absensi_karyawan.ak_users.role_id = absensi_karyawan.ak_roles.role_id").
-		Joins("JOIN absensi_karyawan.ak_departments ON absensi_karyawan.ak_users.departement_id = absensi_karyawan.ak_departments.departments_id").
-		Scan(&users).Error; err != nil {
+func (r *UserRepository) GetAllUsers() ([]models.Ak_Users, error) {
+	var users []models.Ak_Users
+	if err := r.DB.Preload("Department", func(db *gorm.DB) *gorm.DB {
+		return db.Select("departments_id, name_departments")
+	}).Preload("Role", func(db *gorm.DB) *gorm.DB {
+		return db.Select("role_id, name_role")
+	}).Select("user_uid, full_name, departments_id, role_id").Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return users, nil

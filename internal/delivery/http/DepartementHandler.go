@@ -73,6 +73,9 @@ func (h *DepartementHandler) DeleteDepartement(w http.ResponseWriter, r *http.Re
 	id := vars["id"]
 
 	response := h.DepartementService.DeleteDepartements(id)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

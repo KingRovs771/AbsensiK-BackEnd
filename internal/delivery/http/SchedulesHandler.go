@@ -32,7 +32,7 @@ func (h *SchedulesHandler) CreateSchedules(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
 	}
 
-	response := h.SchedulesService.CreateSchedules(schedules.StartTime, schedules.EndTime, schedules.UserId, schedules.Day, schedules.IsActive)
+	response := h.SchedulesService.CreateSchedules(schedules.StartTime, schedules.EndTime, schedules.UserUID, schedules.Day, schedules.IsActive)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
@@ -61,7 +61,7 @@ func (h *SchedulesHandler) UpdateSchedules(w http.ResponseWriter, r *http.Reques
 
 	var schdules models.Ak_Schedules
 
-	schdules.SchedulesId = num
+	schdules.ScheduleId = num
 
 	if err := json.NewDecoder(r.Body).Decode(&schdules); err != nil {
 		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
@@ -75,13 +75,23 @@ func (h *SchedulesHandler) UpdateSchedules(w http.ResponseWriter, r *http.Reques
 
 func (h *SchedulesHandler) DeleteSchedules(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id, ok := vars["schedule_id"]
+
+	if !ok || id == "" {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+	
 	num, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	response := h.SchedulesService.DeleteSchedules(num)
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

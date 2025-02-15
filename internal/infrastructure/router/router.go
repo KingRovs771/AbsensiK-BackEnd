@@ -39,7 +39,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/departements/AllDepartements", departementHandler.GetAllDepartements).Methods("GET")
 	router.HandleFunc("/v1/departements/getDepartementsById/{id}", departementHandler.GetDepartementsById).Methods("GET")
 	router.HandleFunc("/v1/departements/updateDepartements/{id}", departementHandler.UpdateDepartement).Methods("PUT")
-	router.HandleFunc("/v1/departements/deleteDepartements/{id}", departementHandler.DeleteDepartement).Methods("DELETE")
+	router.HandleFunc("/v1/departements/deleteDepartements/{id}", departementHandler.DeleteDepartement).Methods("DELETE", "OPTIONS")
 
 	//roles
 	router.HandleFunc("/v1/roles/insertRoles", roleHandler.CreateRole).Methods("POST", "OPTIONS")
@@ -60,7 +60,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/schdules/insertSchedules", schedulesHandler.CreateSchedules).Methods("POST")
 	router.HandleFunc("/v1/schdules/getSchedulesById/{id:[1-9]+}", schedulesHandler.GetSchedulesById).Methods("GET")
 	router.HandleFunc("/v1/schdules/updateSchedules/{id:[1-9]+}", schedulesHandler.UpdateSchedules).Methods("PUT")
-	router.HandleFunc("/v1/schdules/deleteSchedules/{id:[1-9]+}", schedulesHandler.DeleteSchedules).Methods("DELETE")
+	router.HandleFunc("/v1/schdules/deleteSchedules/{schedule_id}", schedulesHandler.DeleteSchedules).Methods("DELETE", "OPTIONS")
 
 	//tipe Potongan
 	router.HandleFunc("/v1/tipePotongan/allTipePotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")

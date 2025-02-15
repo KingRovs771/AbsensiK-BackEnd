@@ -56,7 +56,7 @@ func (s *SchedulesService) CreateSchedules(startTime, endTime, userId, day strin
 	}
 
 	schedules := &models.Ak_Schedules{
-		UserId:    userId,
+		UserUID:   userId,
 		StartTime: startTime,
 		EndTime:   endTime,
 		Day:       day,
@@ -122,8 +122,8 @@ func (s *SchedulesService) UpdateSchedules(schedules *models.Ak_Schedules) map[s
 	}
 }
 
-func (s *SchedulesService) DeleteSchedules(SchedulesId int64) map[string]interface{} {
-	if err := s.SchedulesRepository.DeleteSchedules(SchedulesId); err != nil {
+func (s *SchedulesService) DeleteSchedules(ScheduleId int64) map[string]interface{} {
+	if err := s.SchedulesRepository.DeleteSchedules(ScheduleId); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Data Tidak Berhasil Dihapus",
@@ -133,6 +133,6 @@ func (s *SchedulesService) DeleteSchedules(SchedulesId int64) map[string]interfa
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Data Berhasil Dihapus",
-		"Id":      SchedulesId,
+		"Id":      ScheduleId,
 	}
 }
