@@ -81,3 +81,41 @@ func (h *IzinHandler) DeleteIzin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
+
+func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	izinIdStr, ok := vars["id"]
+
+	if !ok || izinIdStr == "" {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		log.Println("Invalid Id")
+		return
+	}
+
+	izinId, err := strconv.ParseInt(izinIdStr, 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid Id Parsing Id", http.StatusBadRequest)
+		log.Println("Error Parsing Id")
+		return
+	}
+
+	approveBy := r.Header.Get("X-Full-Name")
+	if approveBy == "" {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println("Error : Tidak ada Approve")
+		return
+	}
+
+	err = h.IzinService.ApprovingIzin(izinId, approveBy)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(
+		map[string]string{
+			"message": "Izin Approve Success",
+		},
+	)
+}

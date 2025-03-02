@@ -1,6 +1,9 @@
 package repository
 
 import (
+	"log"
+	"time"
+
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"gorm.io/gorm"
 )
@@ -15,7 +18,9 @@ func NewIzinRepository(db *gorm.DB) *IzinRepository {
 
 func (r *IzinRepository) GetAllIzin() ([]models.Ak_Izin, error) {
 	var izin []models.Ak_Izin
-	if err := r.DB.Find(&izin).Error; err != nil {
+	if err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
+		return db.Select("user_uid, full_name")
+	}).Find(&izin).Error; err != nil {
 		return nil, err
 	}
 
@@ -45,4 +50,18 @@ func (r *IzinRepository) UpdateIzin(izin *models.Ak_Izin) error {
 
 func (r *IzinRepository) DeleteIzin(IzinId int64) error {
 	return r.DB.Delete(&models.Ak_Izin{}, IzinId).Error
+}
+
+func (r *IzinRepository) ApproveIzin(IzinId int64, ApproveBy string) error {
+	updateData := map[string]interface{}{
+		"status":       1,
+		"approve_by":   ApproveBy,
+		"approve_date": time.Now(),
+	}
+	err := r.DB.Model(&models.Ak_Izin{}).Where("izin_id = ?", IzinId).Updates(updateData).Error
+	if err != nil {
+		log.Println("Error Approving Izin : ", err)
+		return err
+	}
+	return nil
 }

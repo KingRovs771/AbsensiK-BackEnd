@@ -32,7 +32,7 @@ func (s *IzinService) GetAllIzin() map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Data Izin Ditemukan",
-		"Izin":    izin,
+		"Data":    izin,
 	}
 }
 
@@ -45,7 +45,7 @@ func (s *IzinService) CreateIzin(izin *models.Ak_Izin) map[string]interface{} {
 		}
 	}
 
-	if izin.UserId == "" || izin.IzinType == "" || izin.Alasan == "" {
+	if izin.UserUID == "" || izin.IzinType == "" || izin.Alasan == "" {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Data Izin Harus Dilengkapi",
@@ -54,7 +54,7 @@ func (s *IzinService) CreateIzin(izin *models.Ak_Izin) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Data Berhasil Disimpan",
-		"izin":    izin,
+		"Data":    izin,
 	}
 }
 
@@ -72,7 +72,7 @@ func (s *IzinService) GetIzinById(izinId int64) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Succes",
 		"Message": "Data Berhasil Ditemukan",
-		"izin":    izin,
+		"Data":    izin,
 	}
 }
 
@@ -88,7 +88,7 @@ func (s *IzinService) UpdateIzin(izin *models.Ak_Izin) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Data Berhasil Di Update",
-		"Izin":    izin,
+		"Data":    izin,
 	}
 }
 
@@ -104,6 +104,10 @@ func (s *IzinService) DeleteIzin(IzinId int64) map[string]interface{} {
 	return map[string]interface{}{
 		"Status":  "Success",
 		"Message": "Berhasil Menghapus Data Izin",
-		"Izin":    IzinId,
+		"Data":    IzinId,
 	}
+}
+
+func (s *IzinService) ApprovingIzin(IzinId int64, approveBy string) error {
+	return s.IzinRepository.ApproveIzin(IzinId, approveBy)
 }

@@ -16,7 +16,9 @@ func NewKehadiranRepository(db *gorm.DB) *KehadiranRepository {
 func (r *KehadiranRepository) GetKehadiran() ([]models.Ak_Kehadiran, error) {
 	var kehadiran []models.Ak_Kehadiran
 
-	if err := r.DB.Find(&kehadiran).Error; err != nil {
+	if err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
+		return db.Select("user_uid, full_name")
+	}).Preload("Schedules ").Find(&kehadiran).Error; err != nil {
 		return nil, err
 	}
 	return kehadiran, nil

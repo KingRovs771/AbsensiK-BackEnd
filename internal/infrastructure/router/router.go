@@ -75,6 +75,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/getIzinById", izinHandler.GetIzinById).Methods("GET")
 	router.HandleFunc("/v1/izin/updateIzin", izinHandler.UpdateIzin).Methods("PUT")
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
+	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT")
 
 	//return
 	router.Use(middleware.CORSMiddleware())
