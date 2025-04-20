@@ -123,6 +123,9 @@ func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
 		"Message": "User Di Temukan",
 		"User":    user,
 	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 
