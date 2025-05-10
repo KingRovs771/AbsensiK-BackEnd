@@ -23,10 +23,11 @@ func NewRouter(userHandler *http.UserHandler,
 
 	// Get Profile Mobile
 
-	//Login  Auth
+	//Login Auth
 	router.HandleFunc("/v1/auth/login", authHand.Login).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/auth/logout", authHand.Logout).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/auth/getInfo", authHand.GetUserInfo).Methods("GET", "OPTIONS")
+
 	//Users
 	router.HandleFunc("/v1/users/insertUsers", userHandler.CreateUser).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/users/allUsers", userHandler.GetAllUsers).Methods("GET")
@@ -76,6 +77,8 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/updateIzin", izinHandler.UpdateIzin).Methods("PUT")
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
 	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT")
+
+	//absensi
 
 	//return
 	router.Use(middleware.CORSMiddleware())
