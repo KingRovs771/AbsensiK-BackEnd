@@ -113,3 +113,19 @@ func (s *UserService) DeleteUser(UserId int64) map[string]interface{} {
 		"Message": "Berhasil Menghapus Pengguna",
 	}
 }
+
+func (s *UserService) SearchEmployeeByName(name string) map[string]interface{} {
+	employees, err := s.UserRepository.SearchEmployeeByName(name)
+	if err != nil {
+		return map[string]interface{}{
+			"status":  "error",
+			"message": "Failed to retrieve employees",
+		}
+	}
+
+	return map[string]interface{}{
+		"status":  "success",
+		"message": "Employees retrieved successfully",
+		"data":    employees,
+	}
+}

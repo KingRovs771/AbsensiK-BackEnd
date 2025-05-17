@@ -61,3 +61,10 @@ func (r *UserRepository) UpdateUser(user *models.Ak_Users) error {
 func (r *UserRepository) DeleteUser(UserId int64) error {
 	return r.DB.Delete(&models.Ak_Users{}, UserId).Error
 }
+
+func (r *UserRepository) SearchEmployeeByName(name string) ([]models.Ak_Users, error) {
+	var Ak_users []models.Ak_Users
+
+	err := r.DB.Where("full_name LIKE ?", "%"+name+"%").Find(&Ak_users).Error
+	return Ak_users, err
+}

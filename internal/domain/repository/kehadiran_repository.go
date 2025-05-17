@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"gorm.io/gorm"
+	"time"
 )
 
 type KehadiranRepository struct {
@@ -32,10 +33,21 @@ func (r *KehadiranRepository) GetKehadiranById(KehadiranId int64) (*models.Ak_Ke
 	return &kehadiran, nil
 }
 
-func (r *KehadiranRepository) UpdateKehadiran(kehadiran *models.Ak_Kehadiran) error {
-	return r.DB.Save(kehadiran).Error
+func (r *KehadiranRepository) InsertCheckIn(userID string, latitude, longitude float64, photo string, checkInTime time.Time) error {
+	kehadiran := models.Ak_Kehadiran{
+		UserId:    userID,
+		Latitude:  latitude,
+		Longitude: longitude,
+		Photo:     photo,
+		TimeIn:    &checkInTime,
+	}
+	return r.DB.Create(&kehadiran).Error
 }
 
-func (r *KehadiranRepository) DeleteKehadiran(KehadiranId int64) error {
-	return r.DB.Delete(&models.Ak_Kehadiran{}, KehadiranId).Error
+func (r *KehadiranRepository) GetLatestCheckIn(userID string, attendance *models.Ak_Kehadiran) error {
+	return r.DB.Where("user_id = ? AND time_out IS NULL", userID).First(attendance).Error
+}
+
+func (r *KehadiranRepository) InsertCheckOut(kehadiran *models.Ak_Kehadiran) error {
+	return r.DB.Save(&kehadiran).Error
 }

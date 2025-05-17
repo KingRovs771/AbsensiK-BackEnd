@@ -130,3 +130,24 @@ func (h *UserHandler) GetProfile(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 
 }
+
+func (h *UserHandler) SearchEmployeeByName(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	name := r.URL.Query().Get("name")
+
+	if name == "" {
+		http.Error(w, "Name parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	response := h.UserService.SearchEmployeeByName(name)
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	json.NewEncoder(w).Encode(response)
+}

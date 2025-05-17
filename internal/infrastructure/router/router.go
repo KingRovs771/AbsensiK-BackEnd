@@ -14,7 +14,8 @@ func NewRouter(userHandler *http.UserHandler,
 	schedulesHandler *http.SchedulesHandler,
 	potonganHandler *http.PotonganHandler,
 	tipePotonganHandler *http.TipePotonganHandler,
-	izinHandler *http.IzinHandler) *mux.Router {
+	izinHandler *http.IzinHandler,
+	salaryhandler *http.SalaryHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -34,6 +35,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/users/updateUser/{id}", userHandler.UpdateUser).Methods("PUT")
 	router.HandleFunc("/v1/users/deleteUser/{id}", userHandler.DeleteProfile).Methods("DELETE")
 	router.HandleFunc("/v1/users/getUsersByIdUpdate/{id}", userHandler.GetUserByIdUpdate).Methods("GET")
+	router.HandleFunc("/v1/users/getUsers/search", userHandler.SearchEmployeeByName).Methods("GET", "OPTIONS")
 
 	//departements
 	router.HandleFunc("/v1/departements/insertDepartements", departementHandler.CreateDepartements).Methods("POST")
@@ -79,6 +81,11 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT")
 
 	//absensi
+
+	//salary
+	router.HandleFunc("/v1/salary/allSalary", salaryhandler.GetSalariesByCurrentMonth).Methods("GET")
+	router.HandleFunc("/v1/salary/checkAPI", salaryhandler.GetSalary).Methods("GET")
+	router.HandleFunc("/v1/salary/insertSalary", salaryhandler.GenerateSalary).Methods("POST")
 
 	//return
 	router.Use(middleware.CORSMiddleware())

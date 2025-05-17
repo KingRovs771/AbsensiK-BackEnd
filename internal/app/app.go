@@ -29,6 +29,7 @@ func NewApp() *App {
 	PotonganRepo := repository.NewPotonganRepository(db)
 	TipePotonganRepo := repository.NewTipePotonganRepository(db)
 	izinRepo := repository.NewIzinRepository(db)
+	salaryRepo := repository.NewSalaryRepository(db)
 	// # Service
 	userService := services.NewUserService(userRepo, "secretyaa")
 	authService := services.NewAuthService(authRepo, "secretyaa")
@@ -39,6 +40,7 @@ func NewApp() *App {
 	potonganService := services.NewPotonganService(PotonganRepo)
 	tipePotonganService := services.NewTipePotonganService(TipePotonganRepo)
 	izinService := services.NewIzinService(izinRepo)
+	salaryService := services.NewSalaryService(salaryRepo)
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
 	authHandler := deliveryhttp.NewAuthHandler(authService)
@@ -49,6 +51,7 @@ func NewApp() *App {
 	potonganHandler := deliveryhttp.NewPotonganHandler(potonganService)
 	tipePotonganHandler := deliveryhttp.NewTipePotonganHandler(tipePotonganService)
 	izinHandler := deliveryhttp.NewIzinHandler(izinService)
+	salaryHandler := deliveryhttp.NewSalaryHandler(salaryService)
 
 	//router
 	router := router.NewRouter(userHandler,
@@ -59,7 +62,8 @@ func NewApp() *App {
 		schdulesHandler,
 		potonganHandler,
 		tipePotonganHandler,
-		izinHandler)
+		izinHandler,
+		salaryHandler)
 
 	return &App{Router: router}
 }
