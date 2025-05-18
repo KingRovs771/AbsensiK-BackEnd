@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -85,12 +86,12 @@ func (h *IzinHandler) DeleteIzin(w http.ResponseWriter, r *http.Request) {
 func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	izinIdStr, ok := vars["id"]
-
 	if !ok || izinIdStr == "" {
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		log.Println("Invalid Id")
 		return
 	}
+	fmt.Println("Received izinIdStr:", izinIdStr)
 
 	izinId, err := strconv.ParseInt(izinIdStr, 10, 64)
 	if err != nil {
@@ -101,18 +102,21 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 
 	approveBy := r.Header.Get("X-Full-Name")
 	if approveBy == "" {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		log.Println("Error : Tidak ada Approve")
+		http.Error(w, "Header X-Full-Name tidak ditemukan", http.StatusBadRequest)
+		log.Println("Error: Tidak ada Approve")
 		return
 	}
 
 	err = h.IzinService.ApprovingIzin(izinId, approveBy)
 	if err != nil {
+		log.Println("Error approving izin:", err) // Debugging error
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Full-Name")
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(
 		map[string]string{
 			"message": "Izin Approve Success",

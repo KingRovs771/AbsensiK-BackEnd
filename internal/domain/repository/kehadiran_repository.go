@@ -35,7 +35,7 @@ func (r *KehadiranRepository) GetKehadiranById(KehadiranId int64) (*models.Ak_Ke
 
 func (r *KehadiranRepository) InsertCheckIn(userID string, latitude, longitude float64, photo string, checkInTime time.Time) error {
 	kehadiran := models.Ak_Kehadiran{
-		UserId:    userID,
+		UserUID:   userID,
 		Latitude:  latitude,
 		Longitude: longitude,
 		Photo:     photo,

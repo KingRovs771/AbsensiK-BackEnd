@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/repository"
 	"golang.org/x/crypto/bcrypt"
@@ -117,6 +118,7 @@ func (s *UserService) DeleteUser(UserId int64) map[string]interface{} {
 func (s *UserService) SearchEmployeeByName(name string) map[string]interface{} {
 	employees, err := s.UserRepository.SearchEmployeeByName(name)
 	if err != nil {
+		fmt.Println("Error retrieving employees:", err) // Debugging backend
 		return map[string]interface{}{
 			"status":  "error",
 			"message": "Failed to retrieve employees",
@@ -126,6 +128,6 @@ func (s *UserService) SearchEmployeeByName(name string) map[string]interface{} {
 	return map[string]interface{}{
 		"status":  "success",
 		"message": "Employees retrieved successfully",
-		"data":    employees,
+		"Data":    employees,
 	}
 }

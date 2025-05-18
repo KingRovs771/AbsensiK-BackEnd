@@ -4,7 +4,7 @@ import "time"
 
 type Ak_Kehadiran struct {
 	KehadiranId int64      `gorm:"type:primaryKey" json:"kehadiran_id"`
-	UserId      string     `gorm:"type:varchar(30)" json:"user_id"`
+	UserUID     string     `gorm:"type:varchar(30)" json:"user_uid"`
 	ScheduleId  string     `gorm:"type:varchar(30)" json:"schedule_id"`
 	Tanggal     time.Time  `gorm:"type:date" json:"tanggal"`
 	TimeIn      *time.Time `gorm:"type:time" json:"time_in"`

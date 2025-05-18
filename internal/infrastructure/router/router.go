@@ -78,14 +78,13 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/getIzinById", izinHandler.GetIzinById).Methods("GET")
 	router.HandleFunc("/v1/izin/updateIzin", izinHandler.UpdateIzin).Methods("PUT")
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
-	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT")
-
-	//absensi
+	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT", "OPTIONS")
 
 	//salary
-	router.HandleFunc("/v1/salary/allSalary", salaryhandler.GetSalariesByCurrentMonth).Methods("GET")
+	router.HandleFunc("/v1/salary/allSalary", salaryhandler.GetSalariesByMonth).Methods("GET", "OPTIONS")
+	router.HandleFunc("/v1/salary/allSalaryAndName", salaryhandler.GetSalariesByMonthAndName).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/salary/checkAPI", salaryhandler.GetSalary).Methods("GET")
-	router.HandleFunc("/v1/salary/insertSalary", salaryhandler.GenerateSalary).Methods("POST")
+	router.HandleFunc("/v1/salary/insertSalary", salaryhandler.GenerateSalary).Methods("POST", "OPTIONS")
 
 	//return
 	router.Use(middleware.CORSMiddleware())
