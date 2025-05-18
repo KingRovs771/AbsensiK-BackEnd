@@ -157,6 +157,6 @@ func (s *SalaryService) GetSalariesByMonthAndName(month string, year int) map[st
 	return map[string]interface{}{
 		"status":  "success",
 		"message": "Salary data retrieved successfully",
-		"data":    salaries,
+		"Data":    salaries,
 	}
 }

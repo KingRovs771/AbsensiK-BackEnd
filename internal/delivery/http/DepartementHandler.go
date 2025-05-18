@@ -35,8 +35,12 @@ func (h *DepartementHandler) CreateDepartements(w http.ResponseWriter, r *http.R
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	response := h.DepartementService.CreateDepartements(&departement)
-	w.Header().Set("Content-TYpe", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
