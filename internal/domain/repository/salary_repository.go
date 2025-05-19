@@ -103,7 +103,7 @@ func (r *SalaryRepository) GetSalariesByMonthAndName(month string, year int) ([]
 
 	// Query dengan JOIN untuk mengambil `full_name` berdasarkan `user_uid`
 	err := r.DB.Table("ak_salaries").
-		Select("ak_salaries.salary_id, ak_salaries.user_uid, ak_salaries.month, ak_salaries.year, ak_users.full_name").
+		Select("ak_salaries.salary_id, ak_salaries.user_uid, ak_salaries.month, ak_salaries.year, ak_users.full_name, ak_salaries.total_kehadiran, ak_salaries.total_gaji").
 		Joins("JOIN ak_users ON ak_salaries.user_uid = ak_users.user_uid").
 		Where("ak_salaries.month = ? AND ak_salaries.year = ?", month, year).
 		Find(&results).Error
