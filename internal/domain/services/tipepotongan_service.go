@@ -32,9 +32,9 @@ func (s *TipePotonganService) GetAllTipePotongan() map[string]interface{} {
 	}
 
 	return map[string]interface{}{
-		"Status":        "Success",
-		"Message":       "Data Berhasil Ditemukan",
-		"Tipe Potongan": TipePotongan,
+		"Status":  "Success",
+		"Message": "Data Berhasil Ditemukan",
+		"Data":    TipePotongan,
 	}
 }
 
@@ -47,7 +47,7 @@ func (s *TipePotonganService) CreateTipePotongan(tipePotongan *models.Ak_TipePot
 		}
 	}
 
-	if tipePotongan.NamaPotongan == "" || tipePotongan.NilaiPotongan == 0 {
+	if tipePotongan.NamePotongan == "" || tipePotongan.NilaiPotongan == 0 {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Tolong Lengkapi Data Potongan",
@@ -55,9 +55,9 @@ func (s *TipePotonganService) CreateTipePotongan(tipePotongan *models.Ak_TipePot
 	}
 
 	return map[string]interface{}{
-		"Status":        "Success",
-		"Message":       "Data Berhasil Di Inputkan",
-		"Tipe Potongan": tipePotongan,
+		"Status":  "Success",
+		"Message": "Data Berhasil Di Inputkan",
+		"Data":    tipePotongan,
 	}
 }
 
@@ -73,9 +73,9 @@ func (s *TipePotonganService) GetTipePotonganById(TipePotonganId int64) map[stri
 	}
 
 	return map[string]interface{}{
-		"Status":        "Success",
-		"Message":       "Data Berhasil Ditemukan",
-		"Tipe Potongan": tipePotongan,
+		"Status":  "Success",
+		"Message": "Data Berhasil Ditemukan",
+		"Data":    tipePotongan,
 	}
 }
 
@@ -89,9 +89,9 @@ func (s *TipePotonganService) UpdateTipePotongan(TipePotongan *models.Ak_TipePot
 	}
 
 	return map[string]interface{}{
-		"Status":        "Success",
-		"Message":       "Data Berhasil Di Update Silakan Check Data",
-		"Tipe Potongan": TipePotongan,
+		"Status":  "Success",
+		"Message": "Data Berhasil Di Update Silakan Check Data",
+		"Data":    TipePotongan,
 	}
 }
 
