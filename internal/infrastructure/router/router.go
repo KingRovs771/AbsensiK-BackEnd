@@ -38,7 +38,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/users/getUsers/search", userHandler.SearchEmployeeByName).Methods("GET", "OPTIONS")
 
 	//departements
-	router.HandleFunc("/v1/departements/insertDepartements", departementHandler.CreateDepartements).Methods("POST")
+	router.HandleFunc("/v1/departements/insertDepartements", departementHandler.CreateDepartements).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/departements/AllDepartements", departementHandler.GetAllDepartements).Methods("GET")
 	router.HandleFunc("/v1/departements/getDepartementsById/{id}", departementHandler.GetDepartementsById).Methods("GET")
 	router.HandleFunc("/v1/departements/updateDepartements/{id}", departementHandler.UpdateDepartement).Methods("PUT")
@@ -71,6 +71,13 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/tipePotongan/getTipeById/{id:[1-9]+}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
 	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
 	router.HandleFunc("/v1/tipePotongan/deleteTipePotongan/{id:[1-9]+}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE")
+
+	//Potongan
+	router.HandleFunc("/v1/potongan/allPotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")
+	router.HandleFunc("/v1/potongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST")
+	router.HandleFunc("/v1/potongan/getTipeById/{id:[1-9]+}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
+	router.HandleFunc("/v1/potongan/updateTipePotongan/{id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
+	router.HandleFunc("/v1/potongan/deleteTipePotongan/{id:[1-9]+}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE")
 
 	//izin
 	router.HandleFunc("/v1/izin/allIzin", izinHandler.GetAllIzin).Methods("GET")
