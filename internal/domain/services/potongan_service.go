@@ -13,8 +13,8 @@ func NewPotonganService(potonganRepository *repository.PotonganRepository) *Poto
 	return &PotonganService{PotonganRepository: potonganRepository}
 }
 
-func (s *PotonganService) GetAllPotongan() map[string]interface{} {
-	potongan, err := s.PotonganRepository.GetAllPotongan()
+func (s *PotonganService) GetAllPotongan(month string, year int) map[string]interface{} {
+	potongan, err := s.PotonganRepository.GetAllPotongan(month, year)
 
 	if err != nil {
 		return map[string]interface{}{
@@ -32,9 +32,9 @@ func (s *PotonganService) GetAllPotongan() map[string]interface{} {
 	}
 
 	return map[string]interface{}{
-		"Status":   "Success",
-		"Message":  "Data Potongan Berhasil di dapatkan",
-		"Potongan": potongan,
+		"Status":  "Success",
+		"Message": "Data Potongan Berhasil di dapatkan",
+		"Data":    potongan,
 	}
 }
 
@@ -47,7 +47,7 @@ func (s *PotonganService) CreatePotongan(potongan *models.Ak_Potongan) map[strin
 		}
 	}
 
-	if potongan.UserId == "" || potongan.Month == "" || potongan.TipePotongan == "" {
+	if potongan.UserUID == "" || potongan.Month == "" || potongan.TipePotongan == "" {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Data Belum Lengkap",
@@ -55,9 +55,9 @@ func (s *PotonganService) CreatePotongan(potongan *models.Ak_Potongan) map[strin
 	}
 
 	return map[string]interface{}{
-		"Status":   "Success",
-		"Message":  "Data Berhasil Disimpan",
-		"Potongan": potongan,
+		"Status":  "Success",
+		"Message": "Data Berhasil Disimpan",
+		"Data":    potongan,
 	}
 }
 
@@ -72,9 +72,9 @@ func (s *PotonganService) GetPotonganById(PotonganId int64) map[string]interface
 	}
 
 	return map[string]interface{}{
-		"Status":   "Success",
-		"Message":  "Berhasil Mendapatkan Potongan",
-		"Potongan": potongan,
+		"Status":  "Success",
+		"Message": "Berhasil Mendapatkan Potongan",
+		"Data":    potongan,
 	}
 }
 
@@ -88,9 +88,9 @@ func (s *PotonganService) UpdatePotongan(Potongan *models.Ak_Potongan) map[strin
 	}
 
 	return map[string]interface{}{
-		"Status":   "Error",
-		"Message":  "Data Berhasil Di Update",
-		"Potongan": Potongan,
+		"Status":  "Error",
+		"Message": "Data Berhasil Di Update",
+		"Data":    Potongan,
 	}
 }
 

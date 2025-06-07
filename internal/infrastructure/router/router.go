@@ -67,17 +67,17 @@ func NewRouter(userHandler *http.UserHandler,
 
 	//tipe Potongan
 	router.HandleFunc("/v1/tipePotongan/allTipePotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")
-	router.HandleFunc("/v1/tipePotongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST")
-	router.HandleFunc("/v1/tipePotongan/getTipeById/{id:[1-9]+}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
-	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
-	router.HandleFunc("/v1/tipePotongan/deleteTipePotongan/{id:[1-9]+}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE")
+	router.HandleFunc("/v1/tipePotongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/tipePotongan/getTipeById/{tipe_potongan_id}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
+	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{tipe_potongan_id}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
+	router.HandleFunc("/v1/tipePotongan/deleteTipePotongan/{tipe_potongan_id}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE", "OPTIONS")
 
 	//Potongan
 	router.HandleFunc("/v1/potongan/allPotongan", potonganHandler.GetAllPotongan).Methods("GET")
-	router.HandleFunc("/v1/potongan/insertPotongan", potonganHandler.CreatePotongan).Methods("POST")
-	router.HandleFunc("/v1/potongan/getPotonganById/{id:[1-9]+}", potonganHandler.GetPotonganById).Methods("GET")
-	router.HandleFunc("/v1/potongan/updatePotongan/{id:[1-9]+}", potonganHandler.UpdatePotongan).Methods("PUT")
-	router.HandleFunc("/v1/potongan/deletePotongan/{id:[1-9]+}", potonganHandler.UpdatePotongan).Methods("DELETE")
+	router.HandleFunc("/v1/potongan/insertPotongan", potonganHandler.CreatePotongan).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/potongan/getPotonganById/{potongan_id}", potonganHandler.GetPotonganById).Methods("GET")
+	router.HandleFunc("/v1/potongan/updatePotongan/{potongan_id}", potonganHandler.UpdatePotongan).Methods("PUT")
+	router.HandleFunc("/v1/potongan/deletePotongan/{potongan_id}", potonganHandler.UpdatePotongan).Methods("DELETE", "OPTIONS")
 
 	//izin
 	router.HandleFunc("/v1/izin/allIzin", izinHandler.GetAllIzin).Methods("GET")

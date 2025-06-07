@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
@@ -20,8 +21,13 @@ func NewPotonganHandler(potonganHandler *services.PotonganService) *PotonganHand
 }
 
 func (h *PotonganHandler) GetAllPotongan(w http.ResponseWriter, r *http.Request) {
-	response := h.PotonganService.GetAllPotongan()
+	month := r.URL.Query().Get("month")
+	year := time.Now().Year()
+	response := h.PotonganService.GetAllPotongan(month, year)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -34,6 +40,9 @@ func (h *PotonganHandler) CreatePotongan(w http.ResponseWriter, r *http.Request)
 
 	response := h.PotonganService.CreatePotongan(&potongan)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -70,7 +79,7 @@ func (h *PotonganHandler) UpdatePotongan(w http.ResponseWriter, r *http.Request)
 
 func (h *PotonganHandler) DeletePotongan(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id := vars["potongan_id"]
 	num, err := strconv.ParseInt(id, 10, 64)
 
 	if err != nil {
@@ -80,5 +89,8 @@ func (h *PotonganHandler) DeletePotongan(w http.ResponseWriter, r *http.Request)
 
 	response := h.PotonganService.DeletePotongan(num)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
