@@ -15,7 +15,8 @@ func NewRouter(userHandler *http.UserHandler,
 	potonganHandler *http.PotonganHandler,
 	tipePotonganHandler *http.TipePotonganHandler,
 	izinHandler *http.IzinHandler,
-	salaryhandler *http.SalaryHandler) *mux.Router {
+	salaryhandler *http.SalaryHandler,
+	faceHandler *http.FaceHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -93,6 +94,9 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/salary/checkAPI", salaryhandler.GetSalary).Methods("GET")
 	router.HandleFunc("/v1/salary/insertSalary", salaryhandler.GenerateSalary).Methods("POST", "OPTIONS")
 
+	//Face Upload
+	router.HandleFunc("/v1/face/uploadFoto", faceHandler.UploadFaceHandler).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/face/getAllFoto", faceHandler.GetAllFacesHandler).Methods("GET", "OPTIONS")
 	//return
 	router.Use(middleware.CORSMiddleware())
 	return router

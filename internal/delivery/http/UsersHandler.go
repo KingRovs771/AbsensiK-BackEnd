@@ -2,7 +2,6 @@ package http
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -146,8 +145,6 @@ func (h *UserHandler) SearchEmployeeByName(w http.ResponseWriter, r *http.Reques
 	}
 
 	response := h.UserService.SearchEmployeeByName(name)
-
-	fmt.Println("Search Result:", response)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
