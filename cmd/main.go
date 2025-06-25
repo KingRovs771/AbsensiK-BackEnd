@@ -8,16 +8,15 @@ import (
 	"github.com/joho/godotenv"
 )
 
-
-func main(){
+func main() {
 
 	err := godotenv.Load()
-	if err != nil{
+	if err != nil {
 		log.Fatal("Error Loading .env file")
 	}
-	
+
 	apps := app.NewApp()
 	router := apps.SetupRouter()
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", router))
 }
