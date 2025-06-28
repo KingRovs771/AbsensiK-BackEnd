@@ -2,12 +2,12 @@ package http
 
 import (
 	"encoding/json"
-	"log"
-	"net/http"
-	"time"
-
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
 	"github.com/golang-jwt/jwt/v5"
+	"log"
+	"net/http"
+	"strings"
+	"time"
 )
 
 type AuthHandler struct {
@@ -90,4 +90,33 @@ func (h *AuthHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(user)
+}
+
+func (h *AuthHandler) ProfileMobile(w http.ResponseWriter, r *http.Request) {
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		http.Error(w, "Authorization header required", http.StatusUnauthorized)
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+	if tokenString == authHeader { // Jika tidak ada prefix "Bearer "
+		http.Error(w, "Invalid token format", http.StatusUnauthorized)
+		return
+	}
+	user, err := h.AuthService.GetUserFromToken(tokenString)
+	if err != nil {
+		http.Error(w, "Invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status": "success",
+		"data":   user, // Mengirim seluruh objek user
+	})
 }
