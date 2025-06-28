@@ -93,28 +93,24 @@ func (h *AuthHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthHandler) ProfileMobile(w http.ResponseWriter, r *http.Request) {
-	// 1. Ambil token dari header Authorization
+
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
 		http.Error(w, "Authorization header required", http.StatusUnauthorized)
 		return
 	}
 
-	// Format header adalah "Bearer <token>"
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 	if tokenString == authHeader { // Jika tidak ada prefix "Bearer "
 		http.Error(w, "Invalid token format", http.StatusUnauthorized)
 		return
 	}
-
-	// 2. Gunakan service untuk mendapatkan user dari token
 	user, err := h.AuthService.GetUserFromToken(tokenString)
 	if err != nil {
 		http.Error(w, "Invalid token", http.StatusUnauthorized)
 		return
 	}
 
-	// 3. Kirim data user sebagai respons JSON
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
