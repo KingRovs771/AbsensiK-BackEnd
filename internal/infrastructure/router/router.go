@@ -29,7 +29,6 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/auth/login", authHand.Login).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/auth/logout", authHand.Logout).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/auth/getInfo", authHand.GetUserInfo).Methods("GET", "OPTIONS")
-	router.HandleFunc("/v1/auth/profile", authHand.ProfileMobile).Methods("GET")
 	//Users
 	router.HandleFunc("/v1/users/insertUsers", userHandler.CreateUser).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/users/allUsers", userHandler.GetAllUsers).Methods("GET")
