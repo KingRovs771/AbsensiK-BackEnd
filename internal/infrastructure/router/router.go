@@ -82,7 +82,7 @@ func NewRouter(userHandler *http.UserHandler,
 
 	//izin
 	router.HandleFunc("/v1/izin/allIzin", izinHandler.GetAllIzin).Methods("GET")
-	router.HandleFunc("/v1/izin/insertIzin", izinHandler.CreateIzin).Methods("POST")
+	router.HandleFunc("/v1/izin/insertIzin", izinHandler.CreateIzin).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/izin/getIzinById", izinHandler.GetIzinById).Methods("GET")
 	router.HandleFunc("/v1/izin/updateIzin", izinHandler.UpdateIzin).Methods("PUT")
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
