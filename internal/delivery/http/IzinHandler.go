@@ -170,15 +170,18 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 func (h *IzinHandler) getUserFromRequest(r *http.Request) (*models.Ak_Users, error) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
-		return nil, errors.New("Authorization header required")
+		rhttp.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
+		return
 	}
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 	if tokenString == authHeader {
-		return nil, errors.New{"Invalid token format", http.StatusUnauthorized}
+		http.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
+		return
 	}
 	user, err := h.AuthService.GetUserFromToken(tokenString)
 	if err != nil {
-		return nil, errors.New{"Invalid token", http.StatusUnauthorized}
+		http.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
+		return
 	}
 	return user, nil
 }
@@ -187,7 +190,7 @@ func (h *IzinHandler) GetUserPermitHistory(w http.ResponseWriter, r *http.Reques
 	// 1. Panggil helper untuk otentikasi
 	user, err := h.getUserFromRequest(r)
 	if err != nil {
-		http.Error(w, "")
+		http.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
 		return
 	}
 
