@@ -170,7 +170,7 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 func (h *IzinHandler) getUserFromRequest(r *http.Request) (*models.Ak_Users, error) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
-		rhttp.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
+		http.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
 		return
 	}
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
