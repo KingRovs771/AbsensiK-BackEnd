@@ -3,13 +3,13 @@ package http
 import (
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"strconv"
-
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
 	"github.com/gorilla/mux"
+	"io"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 type IzinHandler struct {
