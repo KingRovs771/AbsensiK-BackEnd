@@ -52,7 +52,7 @@ func NewApp() *App {
 	schdulesHandler := deliveryhttp.NewSchedulesHandler(scheduleService)
 	potonganHandler := deliveryhttp.NewPotonganHandler(potonganService)
 	tipePotonganHandler := deliveryhttp.NewTipePotonganHandler(tipePotonganService)
-	izinHandler := deliveryhttp.NewIzinHandler(izinService)
+	izinHandler := deliveryhttp.NewIzinHandler(izinService, authService)
 	salaryHandler := deliveryhttp.NewSalaryHandler(salaryService)
 	faceHandler := deliveryhttp.NewFaceHandler(faceService)
 
