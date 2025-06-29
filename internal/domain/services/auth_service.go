@@ -25,14 +25,10 @@ func NewAuthService(authRepo *repository.AuthRepository, secretKey string) *Auth
 
 func (s *AuthService) GenerateToken(user *models.Ak_Users) (string, error) {
 	claims := jwt.MapClaims{
-		"user_id":    user.UserId,
-		"username":   user.Username,
-		'full_name':  user.FullName,
-		'address':    user.Address,
-		'phone':      user.Phone,
-		'department': user.Department.NameDepartments,
-		"role":       user.Role.NameRole,
-		"exp":        time.Now().Add(time.Hour * 72).Unix(),
+		"user_id":  user.UserId,
+		"username": user.Username,
+		"role":     user.Role.NameRole,
+		"exp":      time.Now().Add(time.Hour * 72).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
