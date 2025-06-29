@@ -14,10 +14,11 @@ import (
 
 type IzinHandler struct {
 	IzinService *services.IzinService
+	AuthService *services.AuthService
 }
 
-func NewIzinHandler(izinService *services.IzinService) *IzinHandler {
-	return &IzinHandler{IzinService: izinService}
+func NewIzinHandler(izinService *services.IzinService, authService *services.AuthService) *IzinHandler {
+	return &IzinHandler{IzinService: izinService, AuthService: authService}
 }
 func (h *IzinHandler) GetAllIzin(w http.ResponseWriter, r *http.Request) {
 	response := h.IzinService.GetAllIzin()
@@ -163,32 +164,43 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 }
+
+func (h *IzinHandler) getUserFromRequest(r *http.Request) (*models.Ak_Users, error) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		return nil, &appError{"Authorization header required", http.StatusUnauthorized}
+	}
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+	if tokenString == authHeader {
+		return nil, &appError{"Invalid token format", http.StatusUnauthorized}
+	}
+	user, err := h.AuthService.GetUserFromToken(tokenString)
+	if err != nil {
+		return nil, &appError{"Invalid token", http.StatusUnauthorized}
+	}
+	return user, nil
+}
 func (h *IzinHandler) GetUserPermitHistory(w http.ResponseWriter, r *http.Request) {
-	user, ok := r.Context().Value("user").(*models.Ak_Users)
-	if !ok || user == nil {
-		http.Error(w, "User not found in context", http.StatusUnauthorized)
+
+	// 1. Panggil helper untuk otentikasi
+	user, err := h.getUserFromRequest(r)
+	if err != nil {
+		appErr := err.(*appError)
+		http.Error(w, appErr.Message, appErr.Code)
 		return
 	}
 
-	// 2. Panggil service untuk mengambil data riwayat berdasarkan UserUID.
+	// 2. Lanjutkan dengan logika Anda
 	permits, err := h.IzinService.GetPermitsByUserUID(user.UserUID)
 	if err != nil {
 		http.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
 		return
 	}
 
-	// Jika tidak ada data, kembalikan array kosong, bukan error.
 	if permits == nil {
 		permits = []models.Ak_Izin{}
 	}
 
-	// 3. Kirim data yang didapat sebagai respons JSON.
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "PUT")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Full-Name")
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status": "success",
-		"data":   permits,
-	})
+	json.NewEncoder(w).Encode(map[string]interface{}{"status": "success", "data": permits})
 }
