@@ -41,7 +41,7 @@ func (h *IzinHandler) CreateIzin(w http.ResponseWriter, r *http.Request) {
 	izin.Alasan = r.FormValue("alasan")
 	izin.StartDate = r.FormValue("start_date")
 	izin.EndDate = r.FormValue("end_date")
-	izin.Status = r.FormValue("status")
+	izin.Status = 0
 
 	// 3. Handle file upload (jika ada)
 	file, _, err := r.FormFile("foto")
