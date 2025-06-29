@@ -200,9 +200,9 @@ func (h *IzinHandler) GetUserPermitHistory(w http.ResponseWriter, r *http.Reques
 	if permits == nil {
 		permits = []models.Ak_Izin{}
 	}
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "PUT")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Full-Name")
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(map[string]interface{}{"status": "success", "data": permits})
 }
