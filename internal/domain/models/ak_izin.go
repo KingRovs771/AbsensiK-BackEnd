@@ -10,6 +10,7 @@ type Ak_Izin struct {
 	EndDate     time.Time `gorm:"type:date" json:"end_date"`
 	Alasan      string    `gorm:"type:text" json:"alasan"`
 	Status      int       `gorm:"type:int" json:"status"`
+	Foto        []byte    `gorm:"type:longblob;" json:"foto"`
 	ApproveBy   string    `gorm:"type:varchar(30)" json:"approve_by"`
 	ApproveDate time.Time `gorm:"type:date" json:"approve_date"`
 

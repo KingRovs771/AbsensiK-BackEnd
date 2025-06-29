@@ -26,14 +26,54 @@ func (h *IzinHandler) GetAllIzin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *IzinHandler) CreateIzin(w http.ResponseWriter, r *http.Request) {
-	var izin models.Ak_Izin
-	if err := json.NewDecoder(r.Body).Decode(&izin); err != nil {
-		log.Println("Invalid Payload Request")
-		http.Error(w, "Invalid Payload Request", http.StatusBadRequest)
+	// 1. Set max memory untuk form
+	err := r.ParseMultipartForm(10 << 20) // 10 MB
+	if err != nil {
+		http.Error(w, "Could not parse multipart form", http.StatusBadRequest)
+		return
 	}
 
+	// 2. Baca semua field teks dari form
+	var izin models.Ak_Izin
+
+	izin.UserUID = r.FormValue("user_uid")
+	izin.IzinType = r.FormValue("izin_type")
+	izin.Alasan = r.FormValue("alasan")
+	izin.StartDate = r.FormValue("start_date")
+	izin.EndDate = r.FormValue("end_date")
+	izin.Status = r.FormValue("status")
+
+	// 3. Handle file upload (jika ada)
+	file, _, err := r.FormFile("foto")
+	if err != nil {
+		// Jika error bukan karena file tidak ada, berarti ini error sebenarnya
+		if err != http.ErrMissingFile {
+			log.Println("Error retrieving file from form-data:", err)
+			http.Error(w, "Error retrieving file", http.StatusBadRequest)
+			return
+		}
+		// Jika file tidak ada (untuk form Izin biasa), biarkan field Photo nil
+	} else {
+		defer file.Close()
+
+		// === PERUBAHAN UTAMA DI SINI ===
+		// Baca seluruh isi file sebagai array byte ([]byte)
+		photoBytes, err := io.ReadAll(file)
+		if err != nil {
+			http.Error(w, "Unable to read file content", http.StatusInternalServerError)
+			return
+		}
+
+		// Masukkan data byte ke dalam struct
+		izin.Foto = photoBytes
+	}
+
+	// 4. Panggil service dengan data yang sudah di-parse
 	response := h.IzinService.CreateIzin(&izin)
-	w.Header().Set("Content-type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 
