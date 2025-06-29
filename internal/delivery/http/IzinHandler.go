@@ -163,3 +163,32 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 		},
 	)
 }
+func (h *IzinHandler) GetUserPermitHistory(w http.ResponseWriter, r *http.Request) {
+	user, ok := r.Context().Value("user").(*models.Ak_Users)
+	if !ok || user == nil {
+		http.Error(w, "User not found in context", http.StatusUnauthorized)
+		return
+	}
+
+	// 2. Panggil service untuk mengambil data riwayat berdasarkan UserUID.
+	permits, err := h.IzinService.GetPermitsByUserUID(user.UserUID)
+	if err != nil {
+		http.Error(w, "Could not fetch permit history", http.StatusInternalServerError)
+		return
+	}
+
+	// Jika tidak ada data, kembalikan array kosong, bukan error.
+	if permits == nil {
+		permits = []models.Ak_Izin{}
+	}
+
+	// 3. Kirim data yang didapat sebagai respons JSON.
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Full-Name")
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status": "success",
+		"data":   permits,
+	})
+}

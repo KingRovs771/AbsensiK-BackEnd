@@ -65,3 +65,16 @@ func (r *IzinRepository) ApproveIzin(IzinId int64, ApproveBy string) error {
 	}
 	return nil
 }
+
+func (r *IzinRepository) GetPermitsByUserUID(userUID string) ([]models.Ak_Izin, error) {
+	var permits []models.Ak_Izin
+
+	// Mencari semua data di tabel 'ak_izins' yang cocok dengan user_uid.
+	// Kita juga mengurutkannya dari yang terbaru (berdasarkan timestamp).
+	err := r.DB.Where("user_uid = ?", userUID).Order("timestamp desc").Find(&permits).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return permits, nil
+}
