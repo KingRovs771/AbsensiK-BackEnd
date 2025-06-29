@@ -6,10 +6,12 @@ import (
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
 	"github.com/gorilla/mux"
+	"golang.org/x/crypto/openpgp/errors"
 	"io"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type IzinHandler struct {
@@ -168,15 +170,15 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 func (h *IzinHandler) getUserFromRequest(r *http.Request) (*models.Ak_Users, error) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
-		return nil, &appError{"Authorization header required", http.StatusUnauthorized}
+		return nil, errors.New("Authorization header required")
 	}
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 	if tokenString == authHeader {
-		return nil, &appError{"Invalid token format", http.StatusUnauthorized}
+		return nil, errors.New{"Invalid token format", http.StatusUnauthorized}
 	}
 	user, err := h.AuthService.GetUserFromToken(tokenString)
 	if err != nil {
-		return nil, &appError{"Invalid token", http.StatusUnauthorized}
+		return nil, errors.New{"Invalid token", http.StatusUnauthorized}
 	}
 	return user, nil
 }
@@ -185,8 +187,7 @@ func (h *IzinHandler) GetUserPermitHistory(w http.ResponseWriter, r *http.Reques
 	// 1. Panggil helper untuk otentikasi
 	user, err := h.getUserFromRequest(r)
 	if err != nil {
-		appErr := err.(*appError)
-		http.Error(w, appErr.Message, appErr.Code)
+		http.Error(w, "")
 		return
 	}
 
