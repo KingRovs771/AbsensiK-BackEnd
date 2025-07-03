@@ -11,6 +11,7 @@ import (
 
 type SalaryHandler struct {
 	SalaryService *services.SalaryService
+	AuthService   *services.AuthService
 }
 
 type SalaryRequest struct {
@@ -19,8 +20,18 @@ type SalaryRequest struct {
 	Year    int64  `json:"year"`
 }
 
-func NewSalaryHandler(salaryService *services.SalaryService) *SalaryHandler {
-	return &SalaryHandler{SalaryService: salaryService}
+// Struct untuk error helper
+type appError struct {
+	Message string
+	Code    int
+}
+
+func (e *appError) Error() string {
+	return e.Message
+}
+
+func NewSalaryHandler(salaryService *services.SalaryService, authService *services.AuthService) *SalaryHandler {
+	return &SalaryHandler{SalaryService: salaryService, AuthService: authService}
 }
 
 func (h *SalaryHandler) GetSalary(w http.ResponseWriter, r *http.Request) {
@@ -93,15 +104,36 @@ func (h *SalaryHandler) GetSalariesByMonthAndName(w http.ResponseWriter, r *http
 	json.NewEncoder(w).Encode(responseData)
 }
 
-//Update
+// Update
+func (h *SalaryHandler) getUserFromRequest(r *http.Request) (*models.Ak_Users, error) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		return nil, &appError{"Authorization header required", http.StatusUnauthorized}
+	}
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+	if tokenString == authHeader {
+		return nil, &appError{"Invalid token format", http.StatusUnauthorized}
+	}
+	user, err := h.AuthService.GetUserFromToken(tokenString)
+	if err != nil {
+		return nil, &appError{"Invalid token", http.StatusUnauthorized}
+	}
+	return user, nil
+}
 
 func (h *SalaryHandler) GetLatestPayslip(w http.ResponseWriter, r *http.Request) {
-	user, ok := r.Context().Value("user").(*models.Ak_Users)
-	if !ok || user == nil {
-		http.Error(w, "User not found in context", http.StatusUnauthorized)
+	// 1. Panggil helper untuk otentikasi
+	user, err := h.getUserFromRequest(r)
+	if err != nil {
+		if appErr, ok := err.(*appError); ok {
+			http.Error(w, appErr.Message, appErr.Code)
+		} else {
+			http.Error(w, "An internal error occurred", http.StatusInternalServerError)
+		}
 		return
 	}
 
+	// 2. Lanjutkan dengan logika bisnis
 	payslipData, err := h.SalaryService.GetLatestPayslip(user.UserUID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)

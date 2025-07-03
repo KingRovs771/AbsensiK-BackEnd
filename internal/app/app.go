@@ -53,7 +53,7 @@ func NewApp() *App {
 	potonganHandler := deliveryhttp.NewPotonganHandler(potonganService)
 	tipePotonganHandler := deliveryhttp.NewTipePotonganHandler(tipePotonganService)
 	izinHandler := deliveryhttp.NewIzinHandler(izinService, authService)
-	salaryHandler := deliveryhttp.NewSalaryHandler(salaryService)
+	salaryHandler := deliveryhttp.NewSalaryHandler(salaryService, authService)
 	faceHandler := deliveryhttp.NewFaceHandler(faceService)
 
 	//router
