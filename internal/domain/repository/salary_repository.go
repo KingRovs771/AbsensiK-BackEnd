@@ -121,10 +121,6 @@ func (r *SalaryRepository) GetLatestSalaryByUserUID(userUID string) (*models.Ak_
 	var salary models.Ak_Salary
 	err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
 		return db.Select("user_uid, full_name")
-	}).Preload("Role", func(db *gorm.DB) *gorm.DB {
-		return db.Select("role_id, name_role")
-	}).Preload("Department", func(db *gorm.DB) *gorm.DB {
-		return db.Select("departments_id , name_departments")
 	}).Where("user_uid = ?", userUID).Order("year desc, month desc").First(&salary).Error
 	return &salary, err
 }

@@ -12,7 +12,5 @@ type Ak_Salary struct {
 	TotalPotongan  int64  `gorm:"type:int" json:"total_potongan"`
 	TotalGaji      int64  `gorm:"type:int" json:"total_gaji"`
 
-	Users      Ak_Users       `gorm:"foreignKey:UserUID;references:UserUID" json:"users"`
-	Role       Ak_Roles       `gorm:"foreignKey:RoleId;references:RoleId" json:"role"`
-	Department Ak_Departments `gorm:"foreignKey:DepartmentsId;references:DepartmentsId" json:"department"`
+	Users Ak_Users `gorm:"foreignKey:UserUID;references:UserUID" json:"users"`
 }
