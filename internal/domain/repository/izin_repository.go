@@ -69,9 +69,9 @@ func (r *IzinRepository) ApproveIzin(IzinId int64, ApproveBy string) error {
 func (r *IzinRepository) GetPermitsByUserUID(userUID string) ([]models.Ak_Izin, error) {
 	var permits []models.Ak_Izin
 
-	// Mencari semua data di tabel 'ak_izins' yang cocok dengan user_uid.
-	// Kita juga mengurutkannya dari yang terbaru (berdasarkan timestamp).
-	err := r.DB.Where("user_uid = ?", userUID).Order("created_at desc").Find(&permits).Error
+	err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
+		return db.Select("user_uid, full_name")
+	}).Where("user_uid = ?", userUID).Order("created_at desc").Find(&permits).Error
 	if err != nil {
 		return nil, err
 	}
