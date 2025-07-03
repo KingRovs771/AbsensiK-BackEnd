@@ -115,3 +115,24 @@ func (r *SalaryRepository) GetSalariesByMonthAndName(month string, year int) ([]
 
 	return results, nil
 }
+
+// Update Terkini
+func (r *SalaryRepository) GetLatestSalaryByUserUID(userUID string) (*models.Ak_Salary, error) {
+	var salary models.Ak_Salary
+	err := r.DB.Where("user_uid = ?", userUID).Order("year desc, month desc").First(&salary).Error
+	return &salary, err
+}
+
+func (r *SalaryRepository) GetAppliedDeductionTypes(userUID string, month string, year int64) ([]string, error) {
+	var deductionTypes []string
+	err := r.DB.Model(&models.Ak_Potongan{}).
+		Where("user_uid = ? AND month = ? AND year = ?", userUID, month, year).
+		Pluck("tipe_potongan", &deductionTypes).Error
+	return deductionTypes, err
+}
+
+func (r *SalaryRepository) GetDeductionDetailsByTypes(tipePotongan []string) ([]models.Ak_TipePotongans, error) {
+	var details []models.Ak_TipePotongans
+	err := r.DB.Where("tipe_potongan_id IN ?", tipePotongan).Find(&details).Error
+	return details, err
+}

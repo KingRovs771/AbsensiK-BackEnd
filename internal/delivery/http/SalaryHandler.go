@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
 	"net/http"
 	"time"
@@ -90,4 +91,25 @@ func (h *SalaryHandler) GetSalariesByMonthAndName(w http.ResponseWriter, r *http
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(responseData)
+}
+
+//Update
+
+func (h *SalaryHandler) GetLatestPayslip(w http.ResponseWriter, r *http.Request) {
+	user, ok := r.Context().Value("user").(*models.Ak_Users)
+	if !ok || user == nil {
+		http.Error(w, "User not found in context", http.StatusUnauthorized)
+		return
+	}
+
+	payslipData, err := h.SalaryService.GetLatestPayslip(user.UserUID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	json.NewEncoder(w).Encode(map[string]interface{}{"status": "success", "data": payslipData})
 }

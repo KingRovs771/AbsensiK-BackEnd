@@ -93,6 +93,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/salary/allSalaryAndName", salaryhandler.GetSalariesByMonthAndName).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/salary/checkAPI", salaryhandler.GetSalary).Methods("GET")
 	router.HandleFunc("/v1/salary/insertSalary", salaryhandler.GenerateSalary).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/salary/getLatestSalary", salaryhandler.GetLatestPayslip).Methods("GET", "OPTIONS")
 
 	//Face Upload
 	router.HandleFunc("/v1/face/uploadFoto", faceHandler.UploadFaceHandler).Methods("POST", "OPTIONS")

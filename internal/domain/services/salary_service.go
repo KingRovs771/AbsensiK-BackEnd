@@ -160,3 +160,55 @@ func (s *SalaryService) GetSalariesByMonthAndName(month string, year int) map[st
 		"Data":    salaries,
 	}
 }
+
+// Update
+func (s *SalaryService) GetLatestPayslip(userUID string) (*models.PayslipResponse, error) {
+	// 1. Ambil data gaji terakhir dari tabel summary `ak_salary`
+	latestSalary, err := s.Repo.GetLatestSalaryByUserUID(userUID)
+	if err != nil {
+		return nil, fmt.Errorf("data gaji tidak ditemukan untuk user %s: %w", userUID, err)
+	}
+
+	// 2. Ambil semua tipe potongan yang berlaku untuk periode tersebut
+	appliedDeductionTypes, err := s.Repo.GetAppliedDeductionTypes(userUID, latestSalary.Month, latestSalary.Year)
+	if err != nil {
+		return nil, fmt.Errorf("gagal mengambil tipe potongan: %w", err)
+	}
+
+	// 3. Ambil detail (nama & nilai) dari setiap tipe potongan
+	var deductionDetails []models.Ak_TipePotongans
+	if len(appliedDeductionTypes) > 0 {
+		deductionDetails, err = s.Repo.GetDeductionDetailsByTypes(appliedDeductionTypes)
+		if err != nil {
+			return nil, fmt.Errorf("gagal mengambil detail potongan: %w", err)
+		}
+	}
+
+	// 4. Susun data untuk respons API
+	payslip := &models.PayslipResponse{
+		Period:          fmt.Sprintf("%s %d", latestSalary.Month, latestSalary.Year),
+		Earnings:        []models.PayslipItem{},
+		Deductions:      []models.PayslipItem{},
+		TotalDeductions: float64(latestSalary.TotalPotongan),
+		NetSalary:       float64(latestSalary.TotalGaji),
+	}
+
+	// 5. Hitung Total Pendapatan (Gross Salary)
+	payslip.TotalEarnings = payslip.NetSalary + payslip.TotalDeductions
+
+	// 6. Karena komponen pendapatan tidak ada, kita buat satu item placeholder
+	payslip.Earnings = append(payslip.Earnings, models.PayslipItem{
+		Name:   "Gaji Pokok & Tunjangan",
+		Amount: payslip.TotalEarnings,
+	})
+
+	// 7. Masukkan rincian potongan
+	for _, detail := range deductionDetails {
+		payslip.Deductions = append(payslip.Deductions, models.PayslipItem{
+			Name:   detail.NamePotongan,
+			Amount: float64(detail.NilaiPotongan),
+		})
+	}
+
+	return payslip, nil
+}
