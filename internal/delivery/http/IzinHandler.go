@@ -18,6 +18,15 @@ type IzinHandler struct {
 	AuthService *services.AuthService
 }
 
+type appError struct {
+	Message string
+	Code    int
+}
+
+func (e *appError) Error() string {
+	return e.Message
+}
+
 func NewIzinHandler(izinService *services.IzinService, authService *services.AuthService) *IzinHandler {
 	return &IzinHandler{IzinService: izinService, AuthService: authService}
 }
@@ -168,15 +177,20 @@ func (h *IzinHandler) ApproveIzin(w http.ResponseWriter, r *http.Request) {
 
 func (h *IzinHandler) getUserFromRequest(r *http.Request) (*models.Ak_Users, error) {
 	authHeader := r.Header.Get("Authorization")
-
+	if authHeader == "" {
+		return nil, &appError{"Authorization header required", http.StatusUnauthorized}
+	}
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-
+	if tokenString == authHeader {
+		return nil, &appError{"Invalid token format", http.StatusUnauthorized}
+	}
 	user, err := h.AuthService.GetUserFromToken(tokenString)
 	if err != nil {
+		return nil, &appError{"Invalid token", http.StatusUnauthorized}
 	}
-
 	return user, nil
 }
+
 func (h *IzinHandler) GetUserPermitHistory(w http.ResponseWriter, r *http.Request) {
 
 	// 1. Panggil helper untuk otentikasi
