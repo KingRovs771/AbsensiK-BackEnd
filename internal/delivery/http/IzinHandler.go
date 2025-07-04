@@ -18,15 +18,6 @@ type IzinHandler struct {
 	AuthService *services.AuthService
 }
 
-type appError struct {
-	Message string
-	Code    int
-}
-
-func (e *appError) Error() string {
-	return e.Message
-}
-
 func NewIzinHandler(izinService *services.IzinService, authService *services.AuthService) *IzinHandler {
 	return &IzinHandler{IzinService: izinService, AuthService: authService}
 }
