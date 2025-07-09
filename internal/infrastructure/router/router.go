@@ -16,7 +16,8 @@ func NewRouter(userHandler *http.UserHandler,
 	tipePotonganHandler *http.TipePotonganHandler,
 	izinHandler *http.IzinHandler,
 	salaryhandler *http.SalaryHandler,
-	faceHandler *http.FaceHandler) *mux.Router {
+	faceHandler *http.FaceHandler,
+	attendanceHandler *http.AttendanceHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
@@ -30,6 +31,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/auth/logout", authHand.Logout).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/auth/getInfo", authHand.GetUserInfo).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/auth/profile", authHand.ProfileMobile).Methods("GET")
+
 	//Users
 	router.HandleFunc("/v1/users/insertUsers", userHandler.CreateUser).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/users/allUsers", userHandler.GetAllUsers).Methods("GET")
@@ -88,6 +90,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
 	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/izin/getIzinByuserUID", izinHandler.GetUserPermitHistory).Methods("GET")
+
 	//salary
 	router.HandleFunc("/v1/salary/allSalary", salaryhandler.GetSalariesByMonth).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/salary/allSalaryAndName", salaryhandler.GetSalariesByMonthAndName).Methods("GET", "OPTIONS")
@@ -98,6 +101,11 @@ func NewRouter(userHandler *http.UserHandler,
 	//Face Upload
 	router.HandleFunc("/v1/face/uploadFoto", faceHandler.UploadFaceHandler).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/face/getAllFoto", faceHandler.GetAllFacesHandler).Methods("GET", "OPTIONS")
+
+	// Attendances
+	router.HandleFunc("/v1/attendances/getDataAttendances", attendanceHandler.GetAttendanceData).Methods("GET", "OPTIONS")
+	router.HandleFunc("/v1/attendances/clockIn", attendanceHandler.ClockIn).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/attendances/clockOut", attendanceHandler.ClockOut).Methods("POST", "OPTIONS")
 	//return
 	router.Use(middleware.CORSMiddleware())
 	return router

@@ -58,19 +58,15 @@ func (h *IzinHandler) CreateIzin(w http.ResponseWriter, r *http.Request) {
 	} else {
 		defer file.Close()
 
-		// === PERUBAHAN UTAMA DI SINI ===
-		// Baca seluruh isi file sebagai array byte ([]byte)
 		photoBytes, err := io.ReadAll(file)
 		if err != nil {
 			http.Error(w, "Unable to read file content", http.StatusInternalServerError)
 			return
 		}
 
-		// Masukkan data byte ke dalam struct
 		izin.Foto = photoBytes
 	}
 
-	// 4. Panggil service dengan data yang sudah di-parse
 	response := h.IzinService.CreateIzin(&izin)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
