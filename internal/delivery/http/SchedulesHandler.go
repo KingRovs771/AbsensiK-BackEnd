@@ -33,7 +33,11 @@ func (h *SchedulesHandler) CreateSchedules(w http.ResponseWriter, r *http.Reques
 	}
 
 	response := h.SchedulesService.CreateSchedules(schedules.StartTime, schedules.EndTime, schedules.UserUID, schedules.Day, schedules.IsActive)
+
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 
@@ -81,7 +85,7 @@ func (h *SchedulesHandler) DeleteSchedules(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-	
+
 	num, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
