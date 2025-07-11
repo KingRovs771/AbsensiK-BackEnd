@@ -12,11 +12,18 @@ import (
 	"time"
 )
 
+type AttendanceService interface {
+	GetAttendancePageData(userUID string) (*models.AttendancePageData, error)
+	PerformClockIn(userUID string, photoFile multipart.File, latStr, lonStr string) (string, error)
+	PerformClockOut(userUID string, latStr, lonStr string) (string, error)
+	GetAllAttendancesForToday() ([]models.Ak_Kehadiran, error)
+}
+
 type attendanceService struct {
 	repo *repository.AttendanceRepository
 }
 
-func NewAttendanceService(repo *repository.AttendanceRepository) *AttendanceService {
+func NewAttendanceService(repo *repository.AttendanceRepository) AttendanceService {
 	return &attendanceService{repo: repo}
 }
 
