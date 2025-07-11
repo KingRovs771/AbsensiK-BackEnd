@@ -106,6 +106,8 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/attendances/getDataAttendances", attendanceHandler.GetAttendanceData).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/attendances/clockIn", attendanceHandler.ClockIn).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/attendances/clockOut", attendanceHandler.ClockOut).Methods("POST", "OPTIONS")
+	router.HandleFunc("/v1/attendances/getAllAttendances", attendanceHandler.GetAttendanceData).Methods("GET", "OPTIONS")
+
 	//return
 	router.Use(middleware.CORSMiddleware())
 	return router

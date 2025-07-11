@@ -39,7 +39,12 @@ func (s *SchedulesService) GetAllSchedules() map[string]interface{} {
 }
 
 func (s *SchedulesService) CreateSchedules(startTime, endTime, userId, day string, isActive int) map[string]interface{} {
-
+	if startTime == "" || endTime == "" || userId == "" || day == "" {
+		return map[string]interface{}{
+			"Status":  "Error",
+			"Message": "Semua field (startTime, endTime, userId, day) wajib diisi.",
+		}
+	}
 	if err := s.ValidateTime(startTime); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
@@ -47,7 +52,7 @@ func (s *SchedulesService) CreateSchedules(startTime, endTime, userId, day strin
 			"Error":   err.Error(),
 		}
 	}
-	if err := s.ValidateTime(startTime); err != nil {
+	if err := s.ValidateTime(endTime); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Invalid Start Time Format",
@@ -79,7 +84,7 @@ func (s *SchedulesService) CreateSchedules(startTime, endTime, userId, day strin
 }
 
 func (s *SchedulesService) ValidateTime(timeStr string) error {
-	layout := "15:04"
+	layout := "15:00"
 	_, err := time.Parse(layout, timeStr)
 	if err != nil {
 		log.Println("Invalid Time Format:", err)

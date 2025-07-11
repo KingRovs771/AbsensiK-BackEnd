@@ -12,17 +12,11 @@ import (
 	"time"
 )
 
-type AttendanceService interface {
-	GetAttendancePageData(userUID string) (*models.AttendancePageData, error)
-	PerformClockIn(userUID string, photoFile multipart.File, latStr, lonStr string) (string, error)
-	PerformClockOut(userUID string, latStr, lonStr string) (string, error)
-}
-
 type attendanceService struct {
 	repo *repository.AttendanceRepository
 }
 
-func NewAttendanceService(repo *repository.AttendanceRepository) AttendanceService {
+func NewAttendanceService(repo *repository.AttendanceRepository) *AttendanceService {
 	return &attendanceService{repo: repo}
 }
 
@@ -181,6 +175,13 @@ func (s *attendanceService) PerformClockOut(userUID string, latStr, lonStr strin
 	}
 
 	return "Absen Pulang berhasil direkam", nil
+}
+
+func (s *attendanceService) GetAllAttendancesForToday() ([]models.Ak_Kehadiran, error) {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	todayDate := time.Now().In(loc).Format("2006-01-02")
+
+	return s.repo.GetAllAttendancesWithUser(todayDate)
 }
 
 // --- Fungsi Helper ---

@@ -105,3 +105,21 @@ func (h *AttendanceHandler) ClockOut(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": message})
 }
+func (h *AttendanceHandler) GetAllAttendances(w http.ResponseWriter, r *http.Request) {
+	attendances, err := h.AttendanceService.GetAllAttendancesForToday()
+	if err != nil {
+		http.Error(w, "Gagal mengambil data absensi", http.StatusInternalServerError)
+		return
+	}
+
+	if attendances == nil {
+		attendances = []models.Ak_Kehadiran{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"Status":  "Success",
+		"Message": "Data absensi berhasil diambil",
+		"Data":    attendances,
+	})
+}
