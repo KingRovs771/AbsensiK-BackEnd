@@ -42,11 +42,11 @@ func (r *AttendanceRepository) UpdateClockOut(userUID string, date string, timeO
 func (r *AttendanceRepository) GetAllAttendancesWithUser(date string) ([]models.Ak_Kehadiran, error) {
 	var results []models.Ak_Kehadiran
 
-	err := r.DB.Table("ak_kehadiran").
-		Select("ak_kehadiran.kehadiran_id, ak_kehadiran.user_uid, ak_users.full_name, ak_kehadiran.tanggal, ak_kehadiran.time_in, ak_kehadiran.time_out").
-		Joins("left join ak_users on ak_users.user_uid = ak_kehadiran.user_uid").
-		Where("ak_kehadiran.tanggal = ?", date).
-		Order("ak_kehadiran.time_in asc").
+	err := r.DB.Table("ak_kehadirans").
+		Select("ak_kehadirans.kehadiran_id, ak_kehadirans.user_uid, ak_users.full_name, ak_kehadirans.tanggal, ak_kehadirans.time_in, ak_kehadirans.time_out").
+		Joins("left join ak_users on ak_users.user_uid = ak_kehadirans.user_uid").
+		Where("ak_kehadirans.tanggal = ?", date).
+		Order("ak_kehadirans.time_in asc").
 		Find(&results).Error
 
 	if err != nil {

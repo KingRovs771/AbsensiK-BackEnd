@@ -111,15 +111,19 @@ func (h *AttendanceHandler) GetAllAttendances(w http.ResponseWriter, r *http.Req
 		http.Error(w, "Gagal mengambil data absensi", http.StatusInternalServerError)
 		return
 	}
-
-	if attendances == nil {
+	message := "Data absensi berhasil diambil"
+	if attendances == nil || len(attendances) == 0 {
 		attendances = []models.Ak_Kehadiran{}
+		message = "Tidak ada data absensi untuk hari ini."
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"Status":  "Success",
-		"Message": "Data absensi berhasil diambil",
+		"Message": message,
 		"Data":    attendances,
 	})
 }

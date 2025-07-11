@@ -26,16 +26,46 @@ func (h *RadiusHandler) GetAllRadius(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *RadiusHandler) CreateRadius(w http.ResponseWriter, r *http.Request) {
-	var radius models.Ak_Radius
-	if err := json.NewDecoder(r.Body).Decode(&radius); err != nil {
-		http.Error(w, "Invalid Request Payload", http.StatusBadRequest)
+	// 1. Decode the request into a temporary map first, not directly to the model.
+	var payload map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
 	}
 
-	response := h.RadiusService.CreateRadius(&radius)
+	// 2. Extract and validate each field manually.
+	nameLocation, _ := payload["name_location"].(string)
+	latStr, _ := payload["latitude"].(string)
+	lonStr, _ := payload["longitude"].(string)
+	// Radius can be float64 from JSON, so we handle that.
+	radiusFloat, _ := payload["radius"].(float64)
+
+	if nameLocation == "" || latStr == "" || lonStr == "" {
+		http.Error(w, "Name, latitude, and longitude are required", http.StatusBadRequest)
+		return
+	}
+
+	// 3. Convert string values to the correct numeric types.
+	latitude, errLat := strconv.ParseFloat(latStr, 64)
+	longitude, errLon := strconv.ParseFloat(lonStr, 64)
+
+	if errLat != nil || errLon != nil {
+		http.Error(w, "Invalid format for latitude or longitude", http.StatusBadRequest)
+		return
+	}
+
+	// 4. Create the final model struct with the correctly typed data.
+	radiusModel := &models.Ak_Radius{
+		NameLocation: nameLocation,
+		Latitude:     latitude,
+		Longitude:    longitude,
+		Radius:       int(radiusFloat), // Convert float64 to int
+	}
+
+	// 5. Pass the correctly formed model to the service.
+	response := h.RadiusService.CreateRadius(radiusModel) // Assuming your service accepts the model
+
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 

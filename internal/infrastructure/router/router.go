@@ -17,13 +17,16 @@ func NewRouter(userHandler *http.UserHandler,
 	izinHandler *http.IzinHandler,
 	salaryhandler *http.SalaryHandler,
 	faceHandler *http.FaceHandler,
-	attendanceHandler *http.AttendanceHandler) *mux.Router {
+	attendanceHandler *http.AttendanceHandler,
+	dashboardHandler *http.DashboardHandler) *mux.Router {
 	router := mux.NewRouter()
 
 	//check API
 	mainHandler := http.NewMainHandler()
 	router.HandleFunc("/check", mainHandler.GetDomain).Methods("GET")
 
+	//Dashbaord
+	router.HandleFunc("/v1/dashboard/status", dashboardHandler.GetDashboardStats).Methods("GET")
 	// Get Profile Mobile
 
 	//Login Auth
@@ -106,7 +109,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/attendances/getDataAttendances", attendanceHandler.GetAttendanceData).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/attendances/clockIn", attendanceHandler.ClockIn).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/attendances/clockOut", attendanceHandler.ClockOut).Methods("POST", "OPTIONS")
-	router.HandleFunc("/v1/attendances/getAllAttendances", attendanceHandler.GetAttendanceData).Methods("GET", "OPTIONS")
+	router.HandleFunc("/v1/attendances/getAllAttendances", attendanceHandler.GetAllAttendances).Methods("GET", "OPTIONS")
 
 	//return
 	router.Use(middleware.CORSMiddleware())
