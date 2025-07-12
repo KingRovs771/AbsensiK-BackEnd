@@ -172,7 +172,7 @@ func (s *attendanceService) PerformClockOut(userUID string, latStr, lonStr strin
 	lon, _ := strconv.ParseFloat(lonStr, 64)
 	distance := calculateDistance(lat, lon, officeLocation.Latitude, officeLocation.Longitude)
 
-	if distance > float64(officeLocation.Radius) {
+	if distance < float64(officeLocation.Radius) {
 		return "", fmt.Errorf("Anda berada di luar radius kantor (Jarak: %.f meter)", distance)
 	}
 
