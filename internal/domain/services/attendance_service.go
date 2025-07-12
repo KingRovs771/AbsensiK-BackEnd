@@ -168,14 +168,10 @@ func (s *attendanceService) PerformClockOut(userUID string, latStr, lonStr strin
 	if err != nil {
 		return "", fmt.Errorf("gagal mendapatkan lokasi kantor")
 	}
-	lat, errLat := strconv.ParseFloat(latStr, 64)
-	lon, errLon := strconv.ParseFloat(lonStr, 64)
-	if errLat != nil || errLon != nil {
-		return "", fmt.Errorf("format latitude atau longitude tidak valid")
-	}
+	lat, _ := strconv.ParseFloat(latStr, 64)
+	lon, _ := strconv.ParseFloat(lonStr, 64)
 	distance := calculateDistance(lat, lon, officeLocation.Latitude, officeLocation.Longitude)
 
-	// PERBAIKAN DI SINI: Casting officeLocation.Radius ke float64
 	if distance > float64(officeLocation.Radius) {
 		return "", fmt.Errorf("Anda berada di luar radius kantor (Jarak: %.f meter)", distance)
 	}
