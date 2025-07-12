@@ -58,8 +58,8 @@ func (r *UserRepository) UpdateUser(user *models.Ak_Users) error {
 	return r.DB.Save(user).Error
 }
 
-func (r *UserRepository) DeleteUser(UserId int64) error {
-	return r.DB.Delete(&models.Ak_Users{}, UserId).Error
+func (r *UserRepository) DeleteUser(UserUID string) error {
+	return r.DB.Where("user_uid= ?", UserUID).Delete(&models.Ak_Users{}).Error
 }
 
 func (r *UserRepository) SearchEmployeeByName(name string) ([]models.Ak_Users, error) {

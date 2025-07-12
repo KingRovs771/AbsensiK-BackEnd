@@ -101,8 +101,8 @@ func (s *UserService) UpdateUser(user *models.Ak_Users) map[string]interface{} {
 	}
 }
 
-func (s *UserService) DeleteUser(UserId int64) map[string]interface{} {
-	if err := s.UserRepository.DeleteUser(UserId); err != nil {
+func (s *UserService) DeleteUser(UserUID string) map[string]interface{} {
+	if err := s.UserRepository.DeleteUser(UserUID); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Gagal Menghapus Pengguna",

@@ -12,6 +12,6 @@ type Ak_Kehadiran struct {
 	Photo       []byte    `gorm:"type:varchar(100)" json:"photo"`
 	Latitude    float64   `gorm:"type:decimal(9,6)" json:"latitude"`
 	Longitude   float64   `gorm:"type:decimal(9,6)" json:"Longitude"`
-	Radius      int64     `gorm:"type:int" json:"radius"`
+	Radius      float64   `gorm:"type:int" json:"radius"`
 	CreatedAt   time.Time `gorm:"type:date" json:"created_at"`
 }

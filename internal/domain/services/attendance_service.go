@@ -60,7 +60,7 @@ func (s *attendanceService) GetAttendancePageData(userUID string) (*models.Atten
 		OfficeLocation: models.OfficeLocationInfo{
 			Latitude:  officeLocation.Latitude,
 			Longitude: officeLocation.Longitude,
-			Radius:    officeLocation.Radius,
+			Radius:    float64(officeLocation.Radius),
 		},
 		Attendance:         models.TodayAttendanceInfo{},
 		LateDuration:       "0 menit",
@@ -137,7 +137,7 @@ func (s *attendanceService) PerformClockIn(userUID string, photoFile multipart.F
 		Photo:      photoBytes,
 		Latitude:   lat,
 		Longitude:  lon,
-		Radius:     int64(officeLocation.Radius),
+		Radius:     float64(officeLocation.Radius),
 	}
 
 	if err := s.repo.CreateClockIn(newAttendance); err != nil {
@@ -168,8 +168,11 @@ func (s *attendanceService) PerformClockOut(userUID string, latStr, lonStr strin
 	if err != nil {
 		return "", fmt.Errorf("gagal mendapatkan lokasi kantor")
 	}
-	lat, _ := strconv.ParseFloat(latStr, 64)
-	lon, _ := strconv.ParseFloat(lonStr, 64)
+	lat, errLat := strconv.ParseFloat(latStr, 64)
+	lon, errLon := strconv.ParseFloat(lonStr, 64)
+	if errLat != nil || errLon != nil {
+		return "", fmt.Errorf("format latitude atau longitude tidak valid")
+	}
 	distance := calculateDistance(lat, lon, officeLocation.Latitude, officeLocation.Longitude)
 
 	// PERBAIKAN DI SINI: Casting officeLocation.Radius ke float64

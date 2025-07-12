@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
 )
@@ -112,4 +113,16 @@ func (h *FaceHandler) GetFaceByUserIDHandler(w http.ResponseWriter, r *http.Requ
 
 	w.Header().Set("Content-Type", "image/jpeg")
 	w.Write(faceData.FaceData)
+}
+
+func (h *FaceHandler) DeleteFoto(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	response := h.FaceService.DeleteFotoUser(id)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, DELETE, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	json.NewEncoder(w).Encode(response)
 }

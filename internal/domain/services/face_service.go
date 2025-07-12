@@ -28,3 +28,17 @@ func (s *FaceService) UploadFace(face *models.Ak_Face) error {
 func (s *FaceService) GetFaceByUserUID(userUID string) (*models.Ak_Face, error) {
 	return s.FaceRepository.GetFaceByUserID(userUID)
 }
+
+func (s *FaceService) DeleteFotoUser(UserUID string) map[string]interface{} {
+	if err := s.FaceRepository.DeleteFoto(UserUID); err != nil {
+		return map[string]interface{}{
+			"Status":  "Error",
+			"Message": "Gagal Menghapus Pengguna",
+			"Error":   err.Error(),
+		}
+	}
+	return map[string]interface{}{
+		"Status":  "Success",
+		"Message": "Berhasil Menghapus Pengguna",
+	}
+}

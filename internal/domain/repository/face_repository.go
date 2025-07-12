@@ -45,3 +45,7 @@ func (r *FaceRepository) GetFaceByUserID(userUID string) (*models.Ak_Face, error
 	}
 	return &face, nil
 }
+
+func (r *FaceRepository) DeleteFoto(UserUID string) error {
+	return r.DB.Where("user_uid= ?", UserUID).Delete(&models.Ak_Face{}).Error
+}
