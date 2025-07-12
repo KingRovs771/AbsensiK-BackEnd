@@ -33,6 +33,7 @@ func NewApp() *App {
 	faceRepos := repository.NewFaceRepository(db)
 	attendanceRepo := repository.NewAttendanceRepository(db)
 	dashboardRepo := repository.NewDashboardRepository(db)
+	reportRepo := repository.NewReportRepository(db)
 	// # Service
 	userService := services.NewUserService(userRepo, "secretyaa")
 	authService := services.NewAuthService(authRepo, "secretyaa")
@@ -47,6 +48,7 @@ func NewApp() *App {
 	faceService := services.NewFaceService(faceRepos)
 	attendanceService := services.NewAttendanceService(attendanceRepo)
 	dashboardService := services.NewDashboardService(dashboardRepo)
+	reportService := services.NewReportService(reportRepo)
 	// # User Handler
 	userHandler := deliveryhttp.NewUserHandler(userService)
 	authHandler := deliveryhttp.NewAuthHandler(authService)
@@ -61,6 +63,7 @@ func NewApp() *App {
 	faceHandler := deliveryhttp.NewFaceHandler(faceService)
 	attendanceHandler := deliveryhttp.NewAttendanceHandler(attendanceService, authService)
 	dashboardHandler := deliveryhttp.NewDashboardHandler(dashboardService)
+	reportHandler := deliveryhttp.NewReportHandler(reportService)
 
 	//router
 	router := router.NewRouter(userHandler,
@@ -75,7 +78,8 @@ func NewApp() *App {
 		salaryHandler,
 		faceHandler,
 		attendanceHandler,
-		dashboardHandler)
+		dashboardHandler,
+		reportHandler)
 
 	return &App{Router: router}
 }
