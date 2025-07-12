@@ -137,7 +137,7 @@ func (s *attendanceService) PerformClockIn(userUID string, photoFile multipart.F
 		Photo:      photoBytes,
 		Latitude:   lat,
 		Longitude:  lon,
-		Radius:     float64(officeLocation.Radius),
+		Radius:     int64(officeLocation.Radius),
 	}
 
 	if err := s.repo.CreateClockIn(newAttendance); err != nil {
