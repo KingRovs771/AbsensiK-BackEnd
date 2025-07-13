@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/services"
 	"net/http"
 )
@@ -32,18 +33,23 @@ func (h *ReportHandler) GenerateReport(w http.ResponseWriter, r *http.Request) {
 	case "users":
 		data, err = h.ReportService.GetAllUsers()
 	default:
-		http.Error(w, "Tipe laporan tidak valid", http.StatusBadRequest)
+		http.Error(w, `{"Status": "Error", "Message": "Tipe laporan tidak valid"}`, http.StatusBadRequest)
 		return
 	}
 
 	if err != nil {
-		http.Error(w, "Gagal menghasilkan laporan: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf(`{"Status": "Error", "Message": "Gagal menghasilkan laporan: %v"}`, err), http.StatusInternalServerError)
 		return
 	}
+	message := "Laporan berhasil diambil"
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status": "success",
-		"data":   data,
+		"Status":  "Success",
+		"Message": message,
+		"Data":    data,
 	})
 }

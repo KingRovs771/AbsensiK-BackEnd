@@ -34,7 +34,7 @@ func (r *reportRepository) GetAttendanceReport(month, year string) ([]models.Att
 	var results []models.AttendanceReport
 	// Menggunakan LIKE untuk mencocokkan bulan dan tahun dari tanggal
 	datePattern := year + "-" + month + "-%"
-	err := r.DB.Table("ak_kehadiran k").
+	err := r.DB.Table("ak_kehadirans k").
 		Select("k.user_uid, u.full_name, k.tanggal, k.time_in, k.time_out").
 		Joins("left join ak_users u on u.user_uid = k.user_uid").
 		Where("k.tanggal LIKE ?", datePattern).
@@ -46,7 +46,7 @@ func (r *reportRepository) GetAttendanceReport(month, year string) ([]models.Att
 func (r *reportRepository) GetLeaveReport(month, year string) ([]models.LeaveReport, error) {
 	var results []models.LeaveReport
 	datePattern := year + "-" + month + "-%"
-	err := r.DB.Table("ak_izin i").
+	err := r.DB.Table("ak_izins i").
 		Select("i.user_uid, u.full_name, i.izin_type as permit_type, i.start_date, i.end_date, i.alasan, i.status").
 		Joins("left join ak_users u on u.user_uid = i.user_uid").
 		Where("i.start_date LIKE ?", datePattern).
