@@ -30,7 +30,7 @@ func (r *DepartementsRepository) GetAllDepartements() ([]models.Ak_Departments, 
 
 func (r *DepartementsRepository) GetDepartementsById(DepartementsId string) (*models.Ak_Departments, error) {
 	var departement models.Ak_Departments
-	if err := r.DB.First(&departement, DepartementsId).Error; err != nil {
+	if err := r.DB.Where("departments_id = ?", DepartementsId).First(&departement).Error; err != nil {
 		return nil, err
 	}
 	return &departement, nil

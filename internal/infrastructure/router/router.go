@@ -48,7 +48,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/departements/insertDepartements", departementHandler.CreateDepartements).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/departements/AllDepartements", departementHandler.GetAllDepartements).Methods("GET")
 	router.HandleFunc("/v1/departements/getDepartementsById/{id}", departementHandler.GetDepartementsById).Methods("GET")
-	router.HandleFunc("/v1/departements/updateDepartements/{id}", departementHandler.UpdateDepartement).Methods("PUT")
+	router.HandleFunc("/v1/departements/updateDepartements/{id}", departementHandler.UpdateDepartement).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/departements/deleteDepartements/{id}", departementHandler.DeleteDepartement).Methods("DELETE", "OPTIONS")
 
 	//roles
