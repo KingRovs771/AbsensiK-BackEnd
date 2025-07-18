@@ -84,22 +84,50 @@ func (h *RadiusHandler) GetRadiusById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *RadiusHandler) UpdateRadius(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
-	num, err := strconv.ParseInt(id, 10, 64)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+    vars := mux.Vars(r)
+    id := vars["id"]
+    num, err := strconv.ParseInt(id, 10, 64)
+    if err != nil {
+        http.Error(w, "Gagal parse ID", http.StatusBadRequest)
+        return
+    }
 
-	var radius models.Ak_Radius
+    // 1. Buat struct sementara untuk menampung request JSON
+    type RadiusUpdateRequest struct {
+        NameLocation string `json:"name_location"`
+        Latitude     string `json:"latitude"`     // Terima sebagai string
+        Longitude    string `json:"longitude"`    // Terima sebagai string
+        Radius       int    `json:"radius"`
+    }
 
-	radius.RadiusId = int(num)
+    var requestPayload RadiusUpdateRequest
+    if err := json.NewDecoder(r.Body).Decode(&requestPayload); err != nil {
+        http.Error(w, "Invalid Request Payload: "+err.Error(), http.StatusBadRequest)
+        return
+    }
 
-	response := h.RadiusService.UpdateRadius(&radius)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+    // 2. Konversi string ke float64
+    lat, errLat := strconv.ParseFloat(requestPayload.Latitude, 64)
+    lon, errLon := strconv.ParseFloat(requestPayload.Longitude, 64)
 
+    if errLat != nil || errLon != nil {
+        http.Error(w, "Latitude atau Longitude bukan angka yang valid", http.StatusBadRequest)
+        return
+    }
+
+    // 3. Siapkan data dengan model database yang benar
+    radiusToUpdate := models.Ak_Radius{
+        RadiusId:     int(num), // ID dari URL
+        NameLocation: requestPayload.NameLocation,
+        Latitude:     lat, // Gunakan nilai float64 yang sudah dikonversi
+        Longitude:    lon, // Gunakan nilai float64 yang sudah dikonversi
+        Radius:       requestPayload.Radius,
+    }
+
+    // 4. Lanjutkan ke service
+    response := h.RadiusService.UpdateRadius(&radiusToUpdate)
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(response)
 }
 
 func (h *RadiusHandler) DeleteRadius(w http.ResponseWriter, r *http.Request) {
