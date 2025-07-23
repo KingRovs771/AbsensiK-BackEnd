@@ -43,7 +43,7 @@ func (h *TipePotonganHandler) CreateTipePotongan(w http.ResponseWriter, r *http.
 
 func (h *TipePotonganHandler) GetTipePotonganById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id := vars["tipe_potongan_id"]
 	num, err := strconv.ParseInt(id, 10, 64)
 
 	if err != nil {
@@ -61,7 +61,7 @@ func (h *TipePotonganHandler) GetTipePotonganById(w http.ResponseWriter, r *http
 
 func (h *TipePotonganHandler) UpdateTipePotongan(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id := vars["tipe_potongan_id"]
 	num, err := strconv.ParseInt(id, 10, 64)
 
 	if err != nil {
@@ -75,6 +75,9 @@ func (h *TipePotonganHandler) UpdateTipePotongan(w http.ResponseWriter, r *http.
 
 	response := h.TipePotonganService.UpdateTipePotongan(&tipePotongan)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 

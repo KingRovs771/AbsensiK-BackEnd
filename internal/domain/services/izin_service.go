@@ -111,6 +111,10 @@ func (s *IzinService) DeleteIzin(IzinId int64) map[string]interface{} {
 func (s *IzinService) ApprovingIzin(IzinId int64, approveBy string) error {
 	return s.IzinRepository.ApproveIzin(IzinId, approveBy)
 }
+
+func (s *IzinService) RejectedIzin(IzinId int64, approveBy string) error {
+	return s.IzinRepository.RejectedIzin(IzinId, approveBy)
+}
 func (s *IzinService) GetPermitsByUserUID(userUID string) ([]models.Ak_Izin, error) {
 	return s.IzinRepository.GetPermitsByUserUID(userUID)
 }

@@ -62,7 +62,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/radius/AllRadius", radiusHandler.GetAllRadius).Methods("GET")
 	router.HandleFunc("/v1/radius/insertRadius", radiusHandler.CreateRadius).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/radius/getRadiusById/{id:[1-9]+}", radiusHandler.GetRadiusById).Methods("GET")
-	router.HandleFunc("/v1/radius/updateRaidus/{id:[1-9]+}", radiusHandler.UpdateRadius).Methods("PUT")
+	router.HandleFunc("/v1/radius/updateRadius/{id:[1-9]+}", radiusHandler.UpdateRadius).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/radius/deleteRadius/{id:[1-9]+}", radiusHandler.DeleteRadius).Methods("DELETE", "OPTIONS")
 
 	//schedules
@@ -76,7 +76,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/tipePotongan/allTipePotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")
 	router.HandleFunc("/v1/tipePotongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/tipePotongan/getTipeById/{tipe_potongan_id}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
-	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{tipe_potongan_id}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT")
+	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{tipe_potongan_id}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/tipePotongan/deleteTipePotongan/{tipe_potongan_id}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE", "OPTIONS")
 
 	//Potongan
@@ -93,6 +93,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/izin/updateIzin", izinHandler.UpdateIzin).Methods("PUT")
 	router.HandleFunc("/v1/izin/deleteIzin", izinHandler.DeleteIzin).Methods("DELETE")
 	router.HandleFunc("/v1/izin/{id}/approve", izinHandler.ApproveIzin).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/v1/izin/{id}/reject", izinHandler.RejectIzin).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/izin/getIzinByuserUID", izinHandler.GetUserPermitHistory).Methods("GET")
 
 	//salary

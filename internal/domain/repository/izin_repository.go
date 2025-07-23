@@ -65,7 +65,19 @@ func (r *IzinRepository) ApproveIzin(IzinId int64, ApproveBy string) error {
 	}
 	return nil
 }
-
+func (r *IzinRepository) RejectedIzin(IzinId int64, ApproveBy string) error {
+	updateData := map[string]interface{}{
+		"status":       2,
+		"approve_by":   ApproveBy,
+		"approve_date": time.Now(),
+	}
+	err := r.DB.Model(&models.Ak_Izin{}).Where("izin_id = ?", IzinId).Updates(updateData).Error
+	if err != nil {
+		log.Println("Error Approving Izin : ", err)
+		return err
+	}
+	return nil
+}
 func (r *IzinRepository) GetPermitsByUserUID(userUID string) ([]models.Ak_Izin, error) {
 	var permits []models.Ak_Izin
 

@@ -87,7 +87,7 @@ func (s *RadiusService) UpdateRadius(radius *models.Ak_Radius) map[string]interf
 	}
 
 	return map[string]interface{}{
-		"Status":  "Error",
+		"Status":  "Success",
 		"Message": "Data Radius Berhasil Terupdate",
 		"Data":    radius,
 	}

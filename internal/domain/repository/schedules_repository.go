@@ -36,7 +36,11 @@ func (r *SchedulesRepository) CreateSchedules(schedules *models.Ak_Schedules) er
 
 func (r *SchedulesRepository) GetSchedulesById(SchedulesId int64) (*models.Ak_Schedules, error) {
 	var schedules models.Ak_Schedules
-	if err := r.DB.First(&schedules, SchedulesId).Error; err != nil {
+	if err := r.DB.Preload("Users", func(db *gorm.DB) *gorm.DB {
+		return db.Preload("Department", func(db *gorm.DB) *gorm.DB {
+			return db.Select("departments_id, name_departments")
+		}).Select("user_uid, full_name, departments_id")
+	}).First(&schedules, SchedulesId).Error; err != nil {
 		return nil, err
 	}
 	return &schedules, nil
