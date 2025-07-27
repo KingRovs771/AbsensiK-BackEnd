@@ -72,17 +72,14 @@ func (h *SalaryHandler) GetSalariesByMonth(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-
 	month := r.URL.Query().Get("month")
 	currentYear := time.Now().Year() // 🔹 Otomatis ambil tahun saat ini
 
-	fmt.Println("Handler Debug - Month:", month, "Year:", currentYear) // 🔹 Debugging backend
 	if month == "" {
 		http.Error(w, "Month parameter is required", http.StatusBadRequest)
 		return
 	}
 	response := h.SalaryService.GetSalariesByMonth(month, currentYear)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
@@ -92,9 +89,7 @@ func (h *SalaryHandler) GetSalariesByMonth(w http.ResponseWriter, r *http.Reques
 
 func (h *SalaryHandler) GetSalariesByMonthAndName(w http.ResponseWriter, r *http.Request) {
 	month := r.URL.Query().Get("month")
-	year := time.Now().Year() // 🔹 Tahun otomatis
-
-	fmt.Println("Handler Debug - Month:", month, "Year:", year) // Debugging
+	year := time.Now().Year()
 
 	responseData := h.SalaryService.GetSalariesByMonthAndName(month, year)
 

@@ -47,7 +47,10 @@ func (r *PotonganRepository) GetPotonganById(PotonganId int64) (*models.Ak_Poton
 }
 
 func (r *PotonganRepository) UpdatePotongan(potongan *models.Ak_Potongan) error {
-	return r.DB.Save(potongan).Error
+	return r.DB.Model(&models.Ak_Potongan{}).
+		Where("potongan_id = ?", potongan.PotonganId).
+		Select("user_uid", "tipe_potongan", "month", "year"). // Sebutkan semua kolom yang boleh di-update
+		Updates(potongan).Error
 }
 
 func (r *PotonganRepository) DeletePotongan(PotonganId int64) error {

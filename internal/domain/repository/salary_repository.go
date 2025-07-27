@@ -22,7 +22,7 @@ func (r *SalaryRepository) SaveSalary(salary *models.Ak_Salary) error {
 func (r *SalaryRepository) GetTotalIzin(userID string, month int, year int) (int64, error) {
 	var count int64
 	err := r.DB.Model(&models.Ak_Izin{}).
-		Where("user_uid = ? AND izin_tipe = 'izin'", userID).
+		Where("user_uid = ? AND izin_type = 'izin'", userID).
 		Where("EXTRACT(MONTH FROM start_date) = ?", month).
 		Where("EXTRACT(YEAR FROM start_date) = ?", year).
 		Where("status = 1").
@@ -33,7 +33,7 @@ func (r *SalaryRepository) GetTotalIzin(userID string, month int, year int) (int
 func (r *SalaryRepository) GetTotalSakit(userID string, month int, year int) (int64, error) {
 	var count int64
 	err := r.DB.Model(&models.Ak_Izin{}).
-		Where("user_uid = ? AND izin_tipe = 'sakit'", userID).
+		Where("user_uid = ? AND izin_type = 'sakit'", userID).
 		Where("EXTRACT(MONTH FROM start_date) = ?", month).
 		Where("EXTRACT(YEAR FROM start_date) = ?", year).
 		Where("status = 1").
@@ -44,7 +44,7 @@ func (r *SalaryRepository) GetTotalSakit(userID string, month int, year int) (in
 func (r *SalaryRepository) GetTotalCuti(userID string, month int, year int) (int64, error) {
 	var count int64
 	err := r.DB.Model(&models.Ak_Izin{}).
-		Where("user_uid = ? AND izin_tipe = 'cuti'", userID).
+		Where("user_uid = ? AND izin_type = 'cuti'", userID).
 		Where("EXTRACT(MONTH FROM start_date) = ?", month).
 		Where("EXTRACT(YEAR FROM start_date) = ?", year).
 		Where("status = 1").
@@ -88,18 +88,12 @@ func (r *SalaryRepository) GetDailyRate(userID string) (int64, error) {
 func (r *SalaryRepository) GetSalariesByMonth(month string, year int) ([]models.Ak_Salary, error) {
 	var salaries []models.Ak_Salary
 
-	// Debugging: Cetak nilai bulan & tahun yang diterima
-	fmt.Println("Repository Debug - Month:", month, "Year:", year)
-
-	// Query database berdasarkan bulan & tahun yang dikirim frontend
 	err := r.DB.Where("month = ? AND year = ?", month, year).Find(&salaries).Error
 	return salaries, err
 }
 
 func (r *SalaryRepository) GetSalariesByMonthAndName(month string, year int) ([]map[string]interface{}, error) {
 	var results []map[string]interface{}
-
-	fmt.Println("Repository Debug - Month:", month, "Year:", year)
 
 	// Query dengan JOIN untuk mengambil `full_name` berdasarkan `user_uid`
 	err := r.DB.Table("ak_salaries").

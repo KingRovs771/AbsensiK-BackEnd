@@ -48,7 +48,7 @@ func (h *PotonganHandler) CreatePotongan(w http.ResponseWriter, r *http.Request)
 
 func (h *PotonganHandler) GetPotonganById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id := vars["potongan_id"]
 	num, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		log.Println("Error")
@@ -61,19 +61,31 @@ func (h *PotonganHandler) GetPotonganById(w http.ResponseWriter, r *http.Request
 
 func (h *PotonganHandler) UpdatePotongan(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id := vars["potongan_id"]
 	num, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		log.Println("Error Not Found Id")
+		// Kirim respons JSON bahkan saat error
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"Status": "Error", "Message": "ID tidak valid"})
 		return
 	}
 
 	var potongan models.Ak_Potongan
-
+	if err := json.NewDecoder(r.Body).Decode(&potongan); err != nil {
+		// Kirim respons JSON bahkan saat error
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"Status": "Error", "Message": "Invalid Request Payload: " + err.Error()})
+		return
+	}
 	potongan.PotonganId = num
 
 	response := h.PotonganService.UpdatePotongan(&potongan)
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	json.NewEncoder(w).Encode(response)
 }
 

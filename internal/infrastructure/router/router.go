@@ -83,8 +83,8 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/potongan/allPotongan", potonganHandler.GetAllPotongan).Methods("GET")
 	router.HandleFunc("/v1/potongan/insertPotongan", potonganHandler.CreatePotongan).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/potongan/getPotonganById/{potongan_id}", potonganHandler.GetPotonganById).Methods("GET")
-	router.HandleFunc("/v1/potongan/updatePotongan/{potongan_id}", potonganHandler.UpdatePotongan).Methods("PUT")
-	router.HandleFunc("/v1/potongan/deletePotongan/{potongan_id}", potonganHandler.UpdatePotongan).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/v1/potongan/updatePotongan/{potongan_id}", potonganHandler.UpdatePotongan).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/v1/potongan/deletePotongan/{potongan_id}", potonganHandler.DeletePotongan).Methods("DELETE", "OPTIONS")
 
 	//izin
 	router.HandleFunc("/v1/izin/allIzin", izinHandler.GetAllIzin).Methods("GET")

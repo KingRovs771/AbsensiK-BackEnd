@@ -88,7 +88,7 @@ func (s *PotonganService) UpdatePotongan(Potongan *models.Ak_Potongan) map[strin
 	}
 
 	return map[string]interface{}{
-		"Status":  "Error",
+		"Status":  "Success",
 		"Message": "Data Berhasil Di Update",
 		"Data":    Potongan,
 	}

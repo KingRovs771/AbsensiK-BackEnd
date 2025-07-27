@@ -63,22 +63,28 @@ func (h *TipePotonganHandler) UpdateTipePotongan(w http.ResponseWriter, r *http.
 	vars := mux.Vars(r)
 	id := vars["tipe_potongan_id"]
 	num, err := strconv.ParseInt(id, 10, 64)
-
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		// Kirim respons JSON bahkan saat error
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"Status": "Error", "Message": "ID tidak valid"})
 		return
 	}
 
-	var tipePotongan models.Ak_TipePotongans
-
-	tipePotongan.TipePotonganId = int(num)
+	// Decode body request ke dalam struct
 	var tipePotonganPayload models.Ak_TipePotongans
 	if err := json.NewDecoder(r.Body).Decode(&tipePotonganPayload); err != nil {
-		http.Error(w, "Invalid Request Payload: "+err.Error(), http.StatusBadRequest)
+		// Kirim respons JSON bahkan saat error
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"Status": "Error", "Message": "Invalid Request Payload: " + err.Error()})
 		return
 	}
 
-	response := h.TipePotonganService.UpdateTipePotongan(&tipePotongan)
+	tipePotonganPayload.TipePotonganId = int(num)
+
+	// Panggil service dengan data yang sudah lengkap
+	response := h.TipePotonganService.UpdateTipePotongan(&tipePotonganPayload)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS")
