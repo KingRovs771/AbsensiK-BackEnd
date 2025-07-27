@@ -38,7 +38,9 @@ func (r *TipePotonganRepository) GetTipePotonganById(TipePotonganId int64) (*mod
 }
 
 func (r *TipePotonganRepository) UpdateTipePotongan(tipePotongan *models.Ak_TipePotongans) error {
-	return r.DB.Save(tipePotongan).Error
+	return r.DB.Model(&models.Ak_TipePotongans{}).
+		Where("tipe_potongan_id = ?", tipePotongan.TipePotonganId).
+		Updates(tipePotongan).Error
 }
 
 func (r *TipePotonganRepository) DeleteTipePotongan(TipePotonganId int64) error {

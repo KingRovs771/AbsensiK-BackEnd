@@ -71,7 +71,12 @@ func (h *TipePotonganHandler) UpdateTipePotongan(w http.ResponseWriter, r *http.
 
 	var tipePotongan models.Ak_TipePotongans
 
-	tipePotongan.TipePotonganId = num
+	tipePotongan.TipePotonganId = int(num)
+	var tipePotonganPayload models.Ak_TipePotongans
+	if err := json.NewDecoder(r.Body).Decode(&tipePotonganPayload); err != nil {
+		http.Error(w, "Invalid Request Payload: "+err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	response := h.TipePotonganService.UpdateTipePotongan(&tipePotongan)
 	w.Header().Set("Content-Type", "application/json")

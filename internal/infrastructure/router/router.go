@@ -76,7 +76,7 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/tipePotongan/allTipePotongan", tipePotonganHandler.GetAllTipePotongan).Methods("GET")
 	router.HandleFunc("/v1/tipePotongan/insertTipePotongan", tipePotonganHandler.CreateTipePotongan).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/tipePotongan/getTipeById/{tipe_potongan_id}", tipePotonganHandler.GetTipePotonganById).Methods("GET")
-	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{tipe_potongan_id}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/v1/tipePotongan/updateTipePotongan/{tipe_potongan_id:[1-9]+}", tipePotonganHandler.UpdateTipePotongan).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/tipePotongan/deleteTipePotongan/{tipe_potongan_id}", tipePotonganHandler.DeleteTipePotongan).Methods("DELETE", "OPTIONS")
 
 	//Potongan
