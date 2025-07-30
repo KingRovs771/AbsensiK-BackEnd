@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type FaceHandler struct {
@@ -124,5 +125,86 @@ func (h *FaceHandler) DeleteFoto(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, DELETE, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	json.NewEncoder(w).Encode(response)
+}
+func (h *FaceHandler) GetFotoByID(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+	if !ok {
+		http.Error(w, "ID foto tidak ditemukan di parameter", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "ID tidak valid", http.StatusBadRequest)
+		return
+	}
+
+	response := h.FaceService.GetFotoByID(id)
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if response["Status"] == "Error" {
+		w.WriteHeader(http.StatusNotFound)
+	}
+
+	json.NewEncoder(w).Encode(response)
+}
+func (h *FaceHandler) UpdateFoto(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	idStr, ok := vars["id"]
+	if !ok {
+		http.Error(w, "Face ID is missing in parameters", http.StatusBadRequest)
+		return
+	}
+	faceID, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid Face ID", http.StatusBadRequest)
+		return
+	}
+
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
+		http.Error(w, "Could not parse multipart form: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// 3. Dapatkan user_uid dari form value
+	userUID := r.FormValue("user_uid")
+	if userUID == "" {
+		http.Error(w, "User UID is required", http.StatusBadRequest)
+		return
+	}
+
+	faceDataToUpdate := models.Ak_Face{
+		FacesID: int64(faceID),
+		UserUID: userUID,
+	}
+
+	file, _, err := r.FormFile("face_data")
+	if err != nil {
+		if err != http.ErrMissingFile {
+			http.Error(w, "Error retrieving the file: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+	} else {
+		defer file.Close()
+
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			http.Error(w, "Error reading the file: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		faceDataToUpdate.FaceData = fileBytes
+	}
+
+	response := h.FaceService.UpdateFoto(&faceDataToUpdate)
+
+	w.Header().Set("Content-Type", "application/json")
+	if response["Status"] == "Error" {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 	json.NewEncoder(w).Encode(response)
 }

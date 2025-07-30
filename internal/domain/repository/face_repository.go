@@ -49,3 +49,24 @@ func (r *FaceRepository) GetFaceByUserID(userUID string) (*models.Ak_Face, error
 func (r *FaceRepository) DeleteFoto(UserUID string) error {
 	return r.DB.Where("user_uid= ?", UserUID).Delete(&models.Ak_Face{}).Error
 }
+
+func (r *FaceRepository) GetFotoByID(id int) (*models.Ak_Face, error) {
+	var face models.Ak_Face
+	err := r.DB.Preload("User").First(&face, id).Error
+	return &face, err
+}
+
+func (r *FaceRepository) UpdateFoto(face *models.Ak_Face) error {
+
+	updateData := map[string]interface{}{
+		"user_uid": face.UserUID,
+	}
+
+	if len(face.FaceData) > 0 {
+		updateData["face_data"] = face.FaceData
+	}
+
+	return r.DB.Model(&models.Ak_Face{}).
+		Where("faces_id = ?", face.FacesID).
+		Updates(updateData).Error
+}

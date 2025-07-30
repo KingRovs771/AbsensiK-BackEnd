@@ -107,6 +107,8 @@ func NewRouter(userHandler *http.UserHandler,
 	router.HandleFunc("/v1/face/uploadFoto", faceHandler.UploadFaceHandler).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/face/getAllFoto", faceHandler.GetAllFacesHandler).Methods("GET", "OPTIONS")
 	router.HandleFunc("/v1/face/deleteFoto/{id}", faceHandler.DeleteFoto).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/v1/face/getFacesById/{id}", faceHandler.GetFotoByID).Methods("GET", "OPTIONS")
+	router.HandleFunc("/v1/face/updateFoto/{id}", faceHandler.UpdateFoto).Methods("PUT", "OPTIONS")
 
 	// Attendances
 	router.HandleFunc("/v1/attendances/getDataAttendances", attendanceHandler.GetAttendanceData).Methods("GET", "OPTIONS")
