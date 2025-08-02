@@ -34,7 +34,14 @@ func (r *RadiusRepository) CreateRadius(radius *models.Ak_Radius) error {
 }
 
 func (r *RadiusRepository) UpdateRadius(Radius *models.Ak_Radius) error {
-	return r.DB.Save(Radius).Error
+	return r.DB.Model(&models.Ak_Radius{}).
+		Where("radius_id = ?", Radius.RadiusId).
+		Updates(models.Ak_Radius{
+			NameLocation: Radius.NameLocation,
+			Latitude:     Radius.Latitude,
+			Longitude:    Radius.Longitude,
+			Radius:       Radius.Radius,
+		}).Error
 }
 
 func (r *RadiusRepository) DeleteRadius(RadiusId int64) error {

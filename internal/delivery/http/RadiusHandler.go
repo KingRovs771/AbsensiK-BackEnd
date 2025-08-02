@@ -84,47 +84,29 @@ func (h *RadiusHandler) GetRadiusById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *RadiusHandler) UpdateRadius(w http.ResponseWriter, r *http.Request) {
+	// Ambil ID dari URL
 	vars := mux.Vars(r)
-	id := vars["id"]
-	num, err := strconv.ParseInt(id, 10, 64)
+	idStr := vars["id"]
+	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
-		http.Error(w, "Gagal parse ID", http.StatusBadRequest)
+		http.Error(w, "ID radius tidak valid", http.StatusBadRequest)
 		return
 	}
 
-	type RadiusUpdateRequest struct {
-		NameLocation string `json:"name_location"`
-		Latitude     string `json:"latitude"`
-		Longitude    string `json:"longitude"`
-		Radius       int    `json:"radius"`
-	}
-
-	var requestPayload RadiusUpdateRequest
-	if err := json.NewDecoder(r.Body).Decode(&requestPayload); err != nil {
+	var radiusPayload models.Ak_Radius
+	if err := json.NewDecoder(r.Body).Decode(&radiusPayload); err != nil {
 		http.Error(w, "Invalid Request Payload: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	lat, errLat := strconv.ParseFloat(requestPayload.Latitude, 64)
-	lon, errLon := strconv.ParseFloat(requestPayload.Longitude, 64)
+	radiusPayload.RadiusId = id
 
-	// Jika konversi gagal, kirim error.
-	if errLat != nil || errLon != nil {
-		http.Error(w, "Latitude atau Longitude bukan angka yang valid", http.StatusBadRequest)
-		return
-	}
+	response := h.RadiusService.UpdateRadius(&radiusPayload)
 
-	radiusToUpdate := models.Ak_Radius{
-		RadiusId:     num,
-		NameLocation: requestPayload.NameLocation,
-		Latitude:     lat, // Gunakan nilai float64 yang sudah dikonversi
-		Longitude:    lon, // Gunakan nilai float64 yang sudah dikonversi
-		Radius:       requestPayload.Radius,
-	}
-
-	// 4. Lanjutkan proses ke service layer dengan data yang sudah bersih.
-	response := h.RadiusService.UpdateRadius(&radiusToUpdate)
 	w.Header().Set("Content-Type", "application/json")
+	if response["Status"] == "Error" {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 	json.NewEncoder(w).Encode(response)
 
 }
