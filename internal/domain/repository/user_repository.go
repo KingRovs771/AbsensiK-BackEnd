@@ -46,18 +46,39 @@ func (r *UserRepository) GetUserById(UserId int64) (*models.Ak_Users, error) {
 	return &users, nil
 }
 
-func (r *UserRepository) GetUserByIdUpdate(UserId int64) (*models.Ak_Users, error) {
+func (r *UserRepository) GetUserByUID(userUID string) (*models.Ak_Users, error) {
 	var user models.Ak_Users
-	if err := r.DB.First(&user, UserId).Error; err != nil {
-		return nil, err
-	}
-	return &user, nil
+	// Menggunakan Preload untuk mengambil data relasi (JOIN)
+	err := r.DB.
+		Joins("Department").
+		Joins("Role").
+		Preload("Department").
+		Preload("Role").
+		Where("ak_users.user_uid = ?", userUID).First(&user).Error
+	return &user, err
 }
 
 func (r *UserRepository) UpdateUser(user *models.Ak_Users) error {
-	return r.DB.Save(user).Error
-}
+	updateData := map[string]interface{}{
+		"username":       user.Username,
+		"email":          user.Email,
+		"full_name":      user.FullName,
+		"gender":         user.Gender,
+		"phone":          user.Phone,
+		"address":        user.Address,
+		"dailyrate":      user.Dailyrate,
+		"departments_id": user.DepartmentsId,
+		"role_id":        user.RoleId,
+	}
 
+	// Hanya update password jika field password diisi di frontend
+	if user.Password != "" {
+		updateData["password"] = user.Password
+	}
+
+	// GORM akan meng-update kolom-kolom yang ada di map `updateData`
+	return r.DB.Model(&models.Ak_Users{}).Where("user_uid = ?", user.UserUID).Updates(updateData).Error
+}
 func (r *UserRepository) DeleteUser(UserUID string) error {
 	return r.DB.Where("user_uid= ?", UserUID).Delete(&models.Ak_Users{}).Error
 }

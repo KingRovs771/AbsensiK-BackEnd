@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/KingRovs771/AbsensiK-BackEnd/internal/domain/models"
@@ -51,31 +50,41 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func (h *UserHandler) GetUserByIdUpdate(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) GetUserByUID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.ParseInt(vars["id"], 10, 64)
-	if err != nil {
-		http.Error(w, "Invalid User Id", http.StatusBadRequest)
-		return
-	}
-	response := h.UserService.GetUsersById(id)
+	// Mengambil 'user_uid' (string) dari URL, sesuai dengan frontend
+	userUID := vars["user_uid"]
+
+	response := h.UserService.GetUserByUID(userUID)
+
 	w.Header().Set("Content-Type", "application/json")
+	if response["Status"] == "Error" {
+		w.WriteHeader(http.StatusNotFound)
+	}
 	json.NewEncoder(w).Encode(response)
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	var user models.Ak_Users
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	vars := mux.Vars(r)
+	userUID := vars["user_uid"]
+
+	var userPayload models.Ak_Users
+	if err := json.NewDecoder(r.Body).Decode(&userPayload); err != nil {
+		http.Error(w, "Invalid Request Payload: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if user.UserId == 0 {
-		http.Error(w, "ID Tidak Ditemukan", http.StatusBadRequest)
-		return
-	}
-	response := h.UserService.UpdateUser(&user)
+	userPayload.UserUID = userUID
+
+	response := h.UserService.UpdateUser(&userPayload)
+
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	if response["Status"] == "Error" {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 	json.NewEncoder(w).Encode(response)
 }
 

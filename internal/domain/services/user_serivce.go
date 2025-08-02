@@ -70,34 +70,41 @@ func (s *UserService) GetProfile(UserId int64) (*models.Ak_Users, error) {
 	return s.UserRepository.GetUserById(UserId)
 }
 
-func (s *UserService) GetUsersById(UserId int64) map[string]interface{} {
-	user, err := s.UserRepository.GetUserByIdUpdate(UserId)
+func (s *UserService) GetUserByUID(userUID string) map[string]interface{} {
+	user, err := s.UserRepository.GetUserByUID(userUID)
 	if err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
-			"Message": "Pengguna Tidak Ditemukan",
+			"Message": "User tidak ditemukan",
 			"Error":   err.Error(),
 		}
 	}
 	return map[string]interface{}{
 		"Status":  "Success",
-		"Message": "Berhasil Mendapatkan Pengguna",
+		"Message": "User ditemukan",
 		"Data":    user,
 	}
 }
 
 func (s *UserService) UpdateUser(user *models.Ak_Users) map[string]interface{} {
+	//if user.Password != "" {
+	//	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	//	if err != nil {
+	//		return map[string]interface{}{"Status": "Error", "Message": "Gagal hashing password"}
+	//	}
+	//	user.Password = string(hashedPassword)
+	//}
+
 	if err := s.UserRepository.UpdateUser(user); err != nil {
 		return map[string]interface{}{
 			"Status":  "Error",
-			"Message": "Gagal Memperbarui Pengguna",
+			"Message": "Gagal memperbarui data user",
 			"Error":   err.Error(),
 		}
 	}
 	return map[string]interface{}{
 		"Status":  "Success",
-		"Message": "Berhasil Memperbarui Pengguna",
-		"Data":    user,
+		"Message": "Data user berhasil diperbarui",
 	}
 }
 

@@ -39,9 +39,9 @@ func NewRouter(userHandler *http.UserHandler,
 	//Users
 	router.HandleFunc("/v1/users/insertUsers", userHandler.CreateUser).Methods("POST", "OPTIONS")
 	router.HandleFunc("/v1/users/allUsers", userHandler.GetAllUsers).Methods("GET")
-	router.HandleFunc("/v1/users/updateUser/{id}", userHandler.UpdateUser).Methods("PUT")
+	router.HandleFunc("/v1/users/updateUser/{user_uid}", userHandler.UpdateUser).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/v1/users/deleteUser/{id}", userHandler.DeleteProfile).Methods("DELETE", "OPTIONS")
-	router.HandleFunc("/v1/users/getUsersByIdUpdate/{id}", userHandler.GetUserByIdUpdate).Methods("GET")
+	router.HandleFunc("/v1/users/getUsersByIdUpdate/{user_uid}", userHandler.GetUserByUID).Methods("GET")
 	router.HandleFunc("/v1/users/getUsers/search", userHandler.SearchEmployeeByName).Methods("GET", "OPTIONS")
 
 	//departements
