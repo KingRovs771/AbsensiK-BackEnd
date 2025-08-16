@@ -39,7 +39,7 @@ func (s *RoleService) GetAllService() map[string]interface{} {
 
 func (s *RoleService) CreateService(role *models.Ak_Roles) map[string]interface{} {
 
-	if role.RoleId == "" || role.NameRole == "" || role.Description == "" {
+	if role.RoleId == "" || role.NameRole == "" || role.Description == "" || role.DailyRate == 0 {
 		return map[string]interface{}{
 			"Status":  "Error",
 			"Message": "Silakan Lengkapi Data Yang Harus di isi",
